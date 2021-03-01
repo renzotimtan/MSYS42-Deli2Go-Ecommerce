@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  letter-spacing: 0.03em;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  color: #4f2c1d;
+}
+
+input#file-upload-button {
+  background: none;
+  font: inherit;
+}
+
+input:active,
+input:focus,
+button:active,
+button:focus {
+  outline: none;
+}
+
+input, textarea, select {
+  border: 1px solid #A79A9A;
+  color: #4f2c1d;
+  border-radius: 3px;
+  font: inherit;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.content {
+  margin-top: 40px;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #4f2c1d;
+  height: 65px;
+}
+
+.nav-content {
+  height: 100%;
+  /* max-width: 1300px; */
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-content__logo {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.nav-content__logo img {
+  height: 80%;
+}
+
+.nav-content__links {
+  width: 35%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-content__links a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.cart {
+  width: 30px;
+}
+
+/* Topbar */
+.topbar {
+  height: 60px;
+  background-color: #3a2116;
+}
+
+.topbar-content {
+  display: flex;
+  /* max-width: 1300px; */
+  width: 80%;
+  height: 100%;
+  margin: 0 auto;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+}
+
+.topbar-content button {
+  background-color: #886455;
+  color: #ffffff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 3px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+

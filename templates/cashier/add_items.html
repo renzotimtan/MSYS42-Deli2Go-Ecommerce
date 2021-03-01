@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/cashier/add_items.css' %}">
+{% endblock styles %}
+    
+ {% block topbar %}
+<h2>Add Items</h2>
+{% endblock topbar %} 
+
+{% block content %}
+<main class="add-items container content">
+  <h2>New Item</h2>
+  <div class="add-items__content">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="add-items__form-content">
+        <div class="form-field">
+          <div class="label">{{form.image.label}}:</div>
+          <div class="image-preview">
+            <img id="image" />
+            {{form.image}}
+          </div>
+        </div>
+
+        <div class="form-field">
+          <div class="label">{{form.description.label}}:</div>
+          {{form.description}}
+        </div>
+
+        <div class="form-field">
+          <div class="label">{{form.brand.label}}:</div>
+          {{form.brand}}
+        </div>
+
+        <div class="form-field">
+          <div class="label">{{form.category.label}}:</div>
+          {{form.category}}
+        </div>
+
+        <div class="form-field">
+          <div class="label">{{form.name.label}}:</div>
+          {{form.name}}
+        </div>
+
+        <div class="form-field">
+          <div class="label">{{form.stock.label}}:</div>
+          {{form.stock}}
+        </div>
+
+        <div class="form-field">
+          <div class="label">{{form.price.label}}:</div>
+          {{form.price}}
+        </div>
+
+        <div class="submit">
+          <input class="add-items__submit" type="submit" value="Submit" />
+        </div>
+      </div>
+    </form>
+  </div>
+</main>
+
+<script>
+  document.getElementById("files").onchange = function () {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      // get loaded data and render thumbnail.
+      document.getElementById("image").src = e.target.result;
+    };
+    // read the image file as a data URL.
+    reader.readAsDataURL(this.files[0]);
+  };
+
+  console.log("hello");
+</script>
+
+{% endblock content %}
