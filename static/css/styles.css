@@ -18,6 +18,13 @@ input#file-upload-button {
   font: inherit;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+
 input:active,
 input:focus,
 button:active,

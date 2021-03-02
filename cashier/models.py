@@ -20,7 +20,7 @@ class Item(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORY)
     brand = models.CharField(max_length=50)
     stock = models.PositiveIntegerField()
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
         return self.name

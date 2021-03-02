@@ -1,0 +1,48 @@
+{% extends 'base.html' %} {% load static %} {% block topbar %}
+<h2>View Item</h2>
+{% endblock topbar %} {% block topbar-button %}
+<a href="{% url 'shop' %}"><button>Back to Shop</button></a>
+{% endblock topbar-button %} {% block styles %}
+<link rel="stylesheet" href="{% static 'css/customer/item.css' %}" />
+{% endblock styles %} {% block content %}
+<main class="item container content">
+  <img src="{{ item.image.url }}" alt="" />
+  <section class="item__infos">
+    <h1>{{item.brand}} {{item.name}}</h1>
+    <div class="item__infos__content">
+      <div class="item__info">
+        <span class="label">Price:</span>
+        PHP {{ item.price }}
+      </div>
+      <div class="item__info">
+        <span class="label">Brand:</span>
+        {{ item.brand }}
+      </div>
+      <div class="item__info">
+        <span class="label">Name:</span>
+        {{ item.name }}
+      </div>
+      
+      <div class="item__info">
+        <span class="label">Category:</span>
+        {{ item.category }}
+      </div>
+    </div>
+    <br>
+    <hr>
+    <div class="item__info description">
+        <div class="label">Description:</div>
+        {{ item.description }}
+      </div>
+    <div class="item__info">
+      <span class="quantity"
+        ><span class="label">Quantity: </span><input type="number"
+      /></span>
+      <span class="available-stock"
+        ><span class="label">Available Stock: </span>{{ item.stock }}</span
+      >
+    </div>
+    <div class="button"><button class="addtocart">Add To Cart</button></div>
+  </section>
+</main>
+{% endblock content %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/customer/shop.css' %}" />
+{% endblock styles %} 
+
+{% block topbar %}
+<h2>Shop</h2>
+{% endblock topbar %} 
+
+
+{% block content %}
+<main class="shop container content">
+  <aside class="shop-filter">
+    <h2>Filter Items</h2>
+    <form method="get" class="filter-form">
+      <div class="filter-content">
+        <h4 class="filter-label">Brand:</h4>
+        {{item_filter.form.brand}}
+        <h4 class="filter-label">Name:</h4>
+        {{item_filter.form.name}}
+        <h4 class="filter-label">Category:</h4>
+        {{item_filter.form.category}}
+        <h4 class="filter-label">Price:</h4>
+        <span
+          >PHP {{item_filter.form.min_price}} — PHP
+          {{item_filter.form.max_price}}</span
+        >
+      </div>
+      <button class="filter-submit" type="submit">Search</button>
+    </form>
+  </aside>
+  <section class="shop-items">
+    {% for item in items %} {% if item.stock > 0 %}
+    <a href="{% url 'view-item' item.id %}">
+      <div class="shop-items__item">
+        <img src="{{ item.image.url }}" alt="item-picture" />
+        <h4 class="shop-items__item-title">{{ item.brand }} {{ item.name }}</h4>
+        <p>PHP {{ item.price }}</p>
+      </div>
+    </a>
+    {% endif %} {% endfor %}
+  </section>
+</main>
+{% endblock content %}

@@ -14,7 +14,7 @@
     <header class="topbar">
       <div class="topbar-content">
         <div class="topbar-text">{% block topbar %} {% endblock topbar %}</div>
-        <button>Back to Inventory</button>
+        {% block topbar-button %} {% endblock topbar-button %}
       </div>
     </header>
     {% block content %} {% endblock content %}
