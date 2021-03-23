@@ -31,15 +31,24 @@
     </form>
   </aside>
   <section class="shop-items">
-    {% for item in items %} {% if item.stock > 0 %}
+    {% for item in items %} 
+    {% if item.stock > 0 %}
     <a href="{% url 'view-item' item.id %}">
       <div class="shop-items__item">
-        <img src="{{ item.image.url }}" alt="item-picture" />
+        
+        {% if item.image %}
+          <img src="{{ item.image.url }}" alt="item-picture" />
+        {% else %}
+          <div class="temp-image"></div>
+        {% endif %}
+          
+        
         <h4 class="shop-items__item-title">{{ item.brand }} {{ item.name }}</h4>
         <p>PHP {{ item.price }}</p>
       </div>
     </a>
-    {% endif %} {% endfor %}
+    {% endif %} 
+    {% endfor %}
   </section>
 </main>
 {% endblock content %}

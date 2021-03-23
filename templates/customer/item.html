@@ -1,12 +1,22 @@
-{% extends 'base.html' %} {% load static %} {% block topbar %}
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
 <h2>View Item</h2>
-{% endblock topbar %} {% block topbar-button %}
+{% endblock topbar %} 
+
+{% block topbar-button %}
 <a href="{% url 'shop' %}"><button>Back to Shop</button></a>
-{% endblock topbar-button %} {% block styles %}
+{% endblock topbar-button %} 
+
+{% block styles %}
 <link rel="stylesheet" href="{% static 'css/customer/item.css' %}" />
-{% endblock styles %} {% block content %}
+{% endblock styles %} 
+
+{% block content %}
 <main class="item container content">
-  <img src="{{ item.image.url }}" alt="" />
+  {% if item.image %}
+      <img src="{{ item.image.url }}" alt="" />
+  {% endif %}
   <section class="item__infos">
     <h1>{{item.brand}} {{item.name}}</h1>
     <div class="item__infos__content">
@@ -45,4 +55,5 @@
     <div class="button"><button class="addtocart">Add To Cart</button></div>
   </section>
 </main>
+
 {% endblock content %}

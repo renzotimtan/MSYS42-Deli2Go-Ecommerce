@@ -1,7 +1,7 @@
 .item {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
+    gap: 100px;
 }
 
 .item img {
