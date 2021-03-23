@@ -74,19 +74,7 @@ class Order(models.Model):
         return self.pk
 
 class Category(models.Model):
-    CATEGORY = (
-        ("Alcohol and Hygiene", "Alcohol and Hygiene"),
-        ("Candy/Gum", "Candy/Gum"),
-        ("Canned Drinks/Bottled Drinks/Powdered Drinks", "Canned Drinks/Bottled Drinks/Powdered Drinks"),
-        ("Gong Cha", "Gong Cha"),
-        ("Magazines", "Magazines"),
-        ("Pastries", "Pastries"),
-        ("Potato Corner", "Potato Corner"),
-        ("Snacks", "Snacks"),
-        ("Turks", "Turks")
-    )
-
-    name = models.CharField(max_length=44, choices=CATEGORY)
+    name = models.CharField(max_length=44)
 
     def __str__(self):
         return self.name
