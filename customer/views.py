@@ -22,3 +22,7 @@ def view_item(request, pk):
         'item':item
     }
     return render(request, 'customer/item.html', context)
+
+def checkout(request):
+    context = {}
+    return render(request, 'customer/checkout.html', context)

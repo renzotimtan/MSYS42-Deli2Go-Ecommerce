@@ -1,50 +1,45 @@
 {% extends 'base.html' %} {% load static %} 
 
-{% block styles %}
-<link rel="stylesheet" href="{% static 'css/customer/shop.css' %}" />
-{% endblock styles %} 
-
 {% block topbar %}
-<h2>Shop</h2>
+<h4>Shop</h4>
 {% endblock topbar %} 
 
-
 {% block content %}
-<main class="shop container content">
+<main class="shop container mt-5">
   <aside class="shop-filter">
-    <h2>Filter Items</h2>
-    <form method="get" class="filter-form">
+    <h4>Filter Items</h4>
+    <form method="get" class="filter-form mt-4">
       <div class="filter-content">
-        <h4 class="filter-label">Brand:</h4>
+        <h6 class="filter-label align-self-center">Brand:</h6>
         {{item_filter.form.brand}}
-        <h4 class="filter-label">Name:</h4>
+        <h6 class="filter-label align-self-center">Name:</h6>
         {{item_filter.form.name}}
-        <h4 class="filter-label">Category:</h4>
+        <h6 class="filter-label align-self-center">Category:</h6>
         {{item_filter.form.category}}
-        <h4 class="filter-label">Price:</h4>
+        <h6 class="filter-label align-self-center">Price:</h6>
         <span
           >PHP {{item_filter.form.min_price}} — PHP
           {{item_filter.form.max_price}}</span
         >
       </div>
-      <button class="filter-submit" type="submit">Search</button>
+      <button class="filter-submit bg-darkbrown b-0 mt-4 text-white w-100" type="submit">Search</button>
     </form>
   </aside>
   <section class="shop-items">
     {% for item in items %} 
     {% if item.stock > 0 %}
     <a href="{% url 'view-item' item.id %}">
-      <div class="shop-items__item">
+      <div class="shop-items__item d-flex flex-column justify-content-around align-items-center">
         
         {% if item.image %}
-          <img src="{{ item.image.url }}" alt="item-picture" />
+          <img src="{{ item.image.url }}" alt="item-picture" class="rounded-circle" />
         {% else %}
-          <div class="temp-image"></div>
+          <div class="temp-image bg-darkbrown" class="rounded-circle"></div>
         {% endif %}
           
         
-        <h4 class="shop-items__item-title">{{ item.brand }} {{ item.name }}</h4>
-        <p>PHP {{ item.price }}</p>
+        <h5 class="shop-items__item-title text-center mt-3">{{ item.brand }} {{ item.name }}</h5>
+        <p class="mt-1">PHP {{ item.price }}</p>
       </div>
     </a>
     {% endif %} 

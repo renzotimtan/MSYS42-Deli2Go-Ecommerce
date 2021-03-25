@@ -1,0 +1,72 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
+<h4>Checkout</h4>
+{% endblock topbar %}
+
+{% block content %}
+<main class="container mt-5">
+  <h4>Shopping Cart Summary</h4>
+  <aside class="breadcrumbs-bar d-flex mt-4">
+    <div class="active">
+      <h6>1. Summary</h6>
+    </div>
+    <div style="border-left-width: 0px">
+      <h6>2. Address</h6>
+    </div>
+    <div style="border-left-width: 0px">
+      <h6>3. Payment</h6>
+    </div>
+  </aside>
+  <section
+    class="cart-content d-flex justify-content-between align-items-start mt-5"
+  >
+    <section class="cart-list p-4 card-bg">
+      <div class="cart-row d-flex mb-4">
+        <div class="flex-2"><p class="weight-600">Image</p></div>
+        <div class="flex-2"><p class="weight-600">Name</p></div>
+        <div class="flex-1"><p class="weight-600">Price</p></div>
+        <div class="flex-1"><p class="weight-600">Quantity</p></div>
+        <div class="flex-1"><p class="weight-600">Total</p></div>
+      </div>
+
+      {% for i in '0123456789' %}
+      <div class="cart-row mb-4 d-flex">
+        <div class="flex-2">
+          <img class="row-image" src="{% static 'img/logo.png' %}" alt="" />
+        </div>
+        <div class="flex-2"><p>Name</p></div>
+        <div class="flex-1"><p>Price</p></div>
+        <div class="flex-1 d-flex">
+          <p>x 2<span></span></p>
+          <div class="quantity d-flex flex-column justify-content-start">
+            <img
+              data-product="1"
+              data-action="add"
+              class="chg-quantity update-cart mb-2"
+              src="{% static 'img/arrow-up.png' %}"
+            />
+
+            <img
+              data-product="1"
+              data-action="remove"
+              class="chg-quantity update-cart"
+              src="{% static 'img/arrow-down.png' %}"
+            />
+          </div>
+        </div>
+        <div class="flex-1"><p>Total</p></div>
+      </div>
+      {% endfor %}
+    </section>
+    <div class="cart-right d-flex flex-column">
+      <section class="order-summary card-bg p-4 w-100">
+        <h4>Order Summary</h4>
+        <hr />
+        <p><strong>Total Amount</strong> : PHP 360</p>
+      </section>
+      <button class="w-100 bg-darkbrown text-white p-3 rounded mt-4">Next</button>
+    </div>
+  </section>
+</main>
+{% endblock content %}

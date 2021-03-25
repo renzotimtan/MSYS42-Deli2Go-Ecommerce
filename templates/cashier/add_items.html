@@ -7,7 +7,7 @@
 {% endblock styles %}
     
  {% block topbar %}
-  <h2>Add Items</h2>
+  <h4>Add Items</h4>
 {% endblock topbar %} 
 
 
@@ -17,19 +17,21 @@
   
 
 {% block content %}
-<main class="add-items container content">
-  <h2>New Item</h2>
+<main class="add-items container my-5">
+  <h4>New Item</h4>
   {% for message in messages %}
-  <p id="error-message">{{ message }}</p>
+  <div class="alert alert-danger mt-3 text-center" role="alert">
+    {{ message }}
+  </div>
   {% endfor %}
-  <div class="add-items__content">
+  <div class="add-items__content mt-4">
     <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="add-items__form-content">
+      <div class="add-items__form-content my-1 mx-0">
         <div class="form-field">
           <div class="label">{{form.image.label}}:</div>
-          <div class="image-preview">
-            <img id="image" />
+          <div class="image-preview w-100 position-relative">
+            <img id="image" class="position-absolute w-100 h-100" />
             {{form.image}}
           </div>
         </div>
@@ -64,27 +66,15 @@
           {{form.price}}
         </div>
 
-        <div class="submit">
-          <input class="add-items__submit" type="submit" value="Submit" />
+        <div class="submit d-flex justify-content-end align-items-end">
+          <input class="add-items__submit bg-darkbrown text-white b-0 w-100 mt-1" type="submit" value="Submit" />
         </div>
       </div>
     </form>
   </div>
-
-  
-  
 </main>
 
 
-
-
-
-<!-- <aside class="error-modal">
-  <div class="error-modal__content">
-    <p>Item already exists</p>
-    <button class="close">Back</button>
-  </div>
-</aside> -->
 
 <script>
   // image upload
