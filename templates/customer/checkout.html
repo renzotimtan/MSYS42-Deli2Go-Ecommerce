@@ -1,27 +1,35 @@
-{% extends 'base.html' %} {% load static %} 
-
-{% block topbar %}
+{% extends 'base.html' %} {% load static %} {% block topbar %}
 <h4>Checkout</h4>
-{% endblock topbar %}
-
-{% block content %}
+{% endblock topbar %} {% block content %}
 <main class="container mt-5">
   <h4>Shopping Cart Summary</h4>
   <aside class="breadcrumbs-bar d-flex mt-4">
-    <div class="active">
+    <div
+      class="active breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center"
+    >
       <h6>1. Summary</h6>
     </div>
-    <div style="border-left-width: 0px">
+    <div
+      style="border-left-width: 0px"
+      class="breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center"
+    >
       <h6>2. Address</h6>
     </div>
-    <div style="border-left-width: 0px">
+    <div
+      style="border-left-width: 0px"
+      class="breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center"
+    >
       <h6>3. Payment</h6>
     </div>
   </aside>
+
+
   <section
-    class="cart-content d-flex justify-content-between align-items-start mt-5"
+    class="cart-content d-lg-flex justify-content-between align-items-start mt-5"
   >
-    <section class="cart-list p-4 card-bg">
+
+    <!-- FIRST PAGE START -->
+    <section class="cart-list p-4 card-bg cart-left">
       <div class="cart-row d-flex mb-4">
         <div class="flex-2"><p class="weight-600">Image</p></div>
         <div class="flex-2"><p class="weight-600">Name</p></div>
@@ -30,8 +38,8 @@
         <div class="flex-1"><p class="weight-600">Total</p></div>
       </div>
 
-      {% for i in '0123456789' %}
-      <div class="cart-row mb-4 d-flex">
+      {% for i in '012' %}
+      <div class=" cart-row mb-4 d-flex">
         <div class="flex-2">
           <img class="row-image" src="{% static 'img/logo.png' %}" alt="" />
         </div>
@@ -59,14 +67,97 @@
       </div>
       {% endfor %}
     </section>
+    <!-- END -->
+
+    <!-- SECOND PAGE START -->
+    <div class="cart-left d-flex flex-column">
+      <div class="cart-address card-bg p-4">
+        <h5>Choose an Address:</h5>
+        <select class="py-2 px-1 w-auto mt-3">
+          <option value="address">34 N. Domingo Street, Quezon City</option>
+        </select>
+      </div >
+      <div class="add-address card-bg p-4 mt-3">
+        <h5>Add a New Address</h5>
+      </div>
+    </div>
+    <!-- END -->
+    
     <div class="cart-right d-flex flex-column">
-      <section class="order-summary card-bg p-4 w-100">
+      <div class="order-summary card-bg p-4 w-100 mt-3 m-lg-0">
         <h4>Order Summary</h4>
         <hr />
-        <p><strong>Total Amount</strong> : PHP 360</p>
-      </section>
-      <button class="w-100 bg-darkbrown text-white p-3 rounded mt-4">Next</button>
+        <p class="d-flex justify-content-between"><strong>Order Total:</strong><span> PHP 360</span</p>
+        <p class="mt-2 d-flex justify-content-between"><strong>Delivery Fee:</strong><span> PHP 100</span></p>
+        <hr>
+        <p class="mt-2 d-flex justify-content-between"><strong>Total Amount:</strong><span> PHP 460</span></p>
+        </div>
+      <div class="d-flex justify-content-center align-items-center">
+        <button
+          class="checkout-back w-100 bg-sienna text-white p-3 rounded mt-4 me-3"
+        >
+          Back
+        </button>
+        <button
+          class="checkout-next w-100 bg-darkbrown text-white p-3 rounded mt-4 ml-3"
+        >
+          Next
+        </button>
+      </div>
     </div>
   </section>
 </main>
+
+<script>
+  let counter = 0;
+  const breadSection = document.querySelectorAll('.breadcrumb-section');
+  const pages = document.querySelectorAll('.cart-left')
+  const next = document.querySelector('.checkout-next');
+  const back = document.querySelector('.checkout-back');
+
+  const handleBreadcrumb = () => {
+    for (let section of breadSection) {
+      section.classList.remove('active');
+      breadSection[counter].classList.add('active');
+    }
+
+    if (counter === 0) {
+      back.classList.add('d-none');
+    } else {
+      back.classList.remove('d-none');
+    }
+
+    if (counter === breadSection.length - 1) {
+      next.classList.add('d-none');
+    } else {
+      next.classList.remove('d-none');
+    }
+  }
+
+  const switchPage = () => {
+    for (let page of pages) {
+      page.classList.add('d-none');
+    }
+    pages[counter].classList.remove('d-none')
+  }
+
+  const refresh = () => {
+    handleBreadcrumb();
+    switchPage();
+  };
+
+  
+
+  refresh();
+
+  next.addEventListener('click', () => {
+    counter++;
+    refresh();
+  });
+
+  back.addEventListener('click', () => {
+    counter--;
+    refresh();
+  });
+</script>
 {% endblock content %}

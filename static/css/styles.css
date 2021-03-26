@@ -1,8 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
 
 :root {
   --darkbrown: #4e2817;
-  --white: #ffffff;
+  --lightbrown: #886455;
 }
 
 * {
@@ -13,7 +13,7 @@
 }
 
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   color: var(--darkbrown);
 }
@@ -76,6 +76,14 @@ button {
   background: var(--darkbrown);
 }
 
+.bg-lightbrown {
+  background: var(--lightbrown);
+}
+
+.bg-sienna {
+  background: sienna;
+}
+
 .weight-400 {
   font-weight: 400;
 }
@@ -128,7 +136,7 @@ button {
 }
 
 .topbar-content button {
-  background-color: #886455;
+  background-color: var(--lightbrown);
   border: none;
   padding: 6px 10px;
   border-radius: 3px;
@@ -299,12 +307,11 @@ button {
 
 .breadcrumbs-bar div {
   height: 50px;
-  color: var(--darkbrown);
   border: solid 1px var(--darkbrown);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+}
+
+.breadcrumb-section {
+  transition: background 0.3s ease-out;
 }
 
 .breadcrumbs-bar .active {
@@ -312,7 +319,7 @@ button {
   background: var(--darkbrown);
 }
 
-.cart-list {
+.cart-left {
   width: 65%;
 }
 
@@ -350,4 +357,13 @@ button {
 
 .cart-right {
   width: 30%;
+}
+
+@media screen and (max-width: 992px) {
+  .cart-list,
+  .cart-address,
+  .cart-right {
+    width: 100%;
+  }
+
 }

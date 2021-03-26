@@ -22,28 +22,37 @@
           {{item_filter.form.max_price}}</span
         >
       </div>
-      <button class="filter-submit bg-darkbrown b-0 mt-4 text-white w-100" type="submit">Search</button>
+      <button
+        class="filter-submit bg-darkbrown b-0 mt-4 text-white w-100"
+        type="submit"
+      >
+        Search
+      </button>
     </form>
   </aside>
   <section class="shop-items">
-    {% for item in items %} 
-    {% if item.stock > 0 %}
+    {% for item in items %} {% if item.stock > 0 %}
     <a href="{% url 'view-item' item.id %}">
-      <div class="shop-items__item d-flex flex-column justify-content-around align-items-center">
-        
+      <div
+        class="shop-items__item d-flex flex-column justify-content-around align-items-center"
+      >
         {% if item.image %}
-          <img src="{{ item.image.url }}" alt="item-picture" class="rounded-circle" />
+        <img
+          src="{{ item.image.url }}"
+          alt="item-picture"
+          class="rounded-circle"
+        />
         {% else %}
-          <div class="temp-image bg-darkbrown" class="rounded-circle"></div>
+        <div class="temp-image bg-darkbrown" class="rounded-circle"></div>
         {% endif %}
-          
-        
-        <h5 class="shop-items__item-title text-center mt-3">{{ item.brand }} {{ item.name }}</h5>
+
+        <h5 class="shop-items__item-title text-center mt-3">
+          {{ item.brand }} {{ item.name }}
+        </h5>
         <p class="mt-1">PHP {{ item.price }}</p>
       </div>
     </a>
-    {% endif %} 
-    {% endfor %}
+    {% endif %} {% endfor %}
   </section>
 </main>
 {% endblock content %}

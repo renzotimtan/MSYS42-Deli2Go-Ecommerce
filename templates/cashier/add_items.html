@@ -1,20 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load static %} 
 
-{% load static %}
-
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'css/cashier/add_items.css' %}">
-{% endblock styles %}
-    
- {% block topbar %}
-  <h4>Add Items</h4>
+{% block topbar %}
+<h4>Add Items</h4>
 {% endblock topbar %} 
 
-
 {% block topbar-button %}
-  <button>Back to Inventory</button>
-{% endblock topbar-button %}
-  
+<button>Back to Inventory</button>
+{% endblock topbar-button %} 
 
 {% block content %}
 <main class="add-items container my-5">
@@ -67,30 +59,30 @@
         </div>
 
         <div class="submit d-flex justify-content-end align-items-end">
-          <input class="add-items__submit bg-darkbrown text-white b-0 w-100 mt-1" type="submit" value="Submit" />
+          <input
+            class="add-items__submit bg-darkbrown text-white b-0 w-100 mt-1"
+            type="submit"
+            value="Submit"
+          />
         </div>
       </div>
     </form>
   </div>
 </main>
 
-
-
 <script>
   // image upload
-  document.getElementById("files").onchange = function () {
+  document.getElementById('files').onchange = function () {
     var reader = new FileReader();
 
     reader.onload = function (e) {
       // get loaded data and render thumbnail.
-      document.getElementById("image").src = e.target.result;
+      document.getElementById('image').src = e.target.result;
     };
     // read the image file as a data URL.
     reader.readAsDataURL(this.files[0]);
   };
-
 </script>
-
 
 <!-- {% if isDuplicate %}
 <script>
