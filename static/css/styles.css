@@ -56,7 +56,7 @@ button:focus {
 input,
 textarea,
 select {
-  width: 100%;
+  /* width: 100%; */
   border: 1px solid #a79a9a;
   color: var(--darkbrown);
   border-radius: 3px;

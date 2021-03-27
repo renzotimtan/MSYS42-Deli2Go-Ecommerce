@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Textarea, FileInput, NumberInput
-from .models import Item
+from .models import Item, Order
 
 
 class ItemForm(ModelForm):

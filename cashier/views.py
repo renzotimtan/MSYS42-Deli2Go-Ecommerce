@@ -21,7 +21,7 @@ def add_items(request):
             if not len(duplicates):
                 form.save()
             else:
-                messages.error(request, "Item already exists")
+                messages.error(request, "Error - Item already exists")
                 form = ItemForm(request.POST, request.FILES)
                 return render(request, 'cashier/add_items.html', {'form': form})
             

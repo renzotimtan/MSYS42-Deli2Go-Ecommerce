@@ -73,13 +73,37 @@
     <div class="cart-left d-flex flex-column">
       <div class="cart-address card-bg p-4">
         <h5>Choose an Address:</h5>
-        <select class="py-2 px-1 w-auto mt-3">
+        <select name="address" class="py-2 px-1 w-auto mt-3" required>
           <option value="address">34 N. Domingo Street, Quezon City</option>
         </select>
       </div >
       <div class="add-address card-bg p-4 mt-3">
         <h5>Add a New Address</h5>
       </div>
+    </div>
+    <!-- END -->
+
+    <!-- THIRD PAGE START -->
+    <div class="cart-left card-bg p-4">
+      <div class="cart-payment">
+        <h5 class="mb-3">Payment Method:</h5>
+        <input type="radio" id="male" name="gender" value="male">
+        <label for="male">Male</label><br>
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Female</label><br>
+        <input type="radio" id="other" name="gender" value="other">
+        <label for="other">Other</label>
+      </div>
+
+        <div class="cart-pickup-date mt-4">
+          <h5 class="mb-3">Preferred Date of Delivery/Pick-up:</h5>
+          <input class="cart-date px-1 py-1" type="date" name="date" required>
+        </div>
+        <div class="cart-pickup-date mt-4">
+          <h5 class="mb-3">Preferred Time of Delivery/Pick-up:</h5>
+          <input class="cart-time px-1 py-1 me-2" type="time" name="time" id="" min="08:00" max="17:00" required>
+          <small>Office hours are 8am to 6pm</small>
+        </div>
     </div>
     <!-- END -->
     
@@ -103,6 +127,9 @@
         >
           Next
         </button>
+        <input type="submit"
+          class="checkout-submit w-100 bg-darkbrown text-white p-3 rounded mt-4 ml-3" value="Submit"
+        />
       </div>
     </div>
   </section>
@@ -114,6 +141,7 @@
   const pages = document.querySelectorAll('.cart-left')
   const next = document.querySelector('.checkout-next');
   const back = document.querySelector('.checkout-back');
+  const submit = document.querySelector('.checkout-submit')
 
   const handleBreadcrumb = () => {
     for (let section of breadSection) {
@@ -129,8 +157,10 @@
 
     if (counter === breadSection.length - 1) {
       next.classList.add('d-none');
+      submit.classList.remove('d-none')
     } else {
       next.classList.remove('d-none');
+      submit.classList.add('d-none')
     }
   }
 
@@ -146,8 +176,6 @@
     switchPage();
   };
 
-  
-
   refresh();
 
   next.addEventListener('click', () => {
@@ -159,5 +187,42 @@
     counter--;
     refresh();
   });
+
+
+  // For date field
+  const configureDate = date => {
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    const year = date.getFullYear();
+  
+    if(month < 10) month = '0' + month.toString();
+    if(day < 10) day = '0' + day.toString();
+
+    const convertedDate = year + '-' + month + '-' + day;
+    return convertedDate;
+  }
+
+  const cartDate = document.querySelector(".cart-date")
+  const cartTime = document.querySelector(".cart-time")
+  const dtToday = new Date();
+  const twoWeeks = new Date(Date.now() + 12096e5);
+
+  const convertedDtToday = configureDate(dtToday)
+  const convertedTwoWeeks = configureDate(twoWeeks)
+  // const minTime = dtToday.getTime();
+
+  cartDate.setAttribute('min', convertedDtToday)
+  cartDate.setAttribute('value', convertedDtToday)
+  cartDate.setAttribute('max', convertedTwoWeeks)
+
+  // cartDate.addEventListener("change", (e) => {
+  //   if (e.target.value === convertedDtToday) {
+  //     cartTime.setAttribute("min", minTime)
+  //   } else {
+  //     cartTime.setAttribute("min", "8:00")
+  //   }
+  // })
+
+
 </script>
 {% endblock content %}
