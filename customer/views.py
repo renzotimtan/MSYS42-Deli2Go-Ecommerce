@@ -26,4 +26,27 @@ def view_item(request, pk):
 def checkout(request):
     context = {}
 
+    if request.method == "POST":
+        order = Order.objects.get(customer=request.user.customer, complete=False)
+
+        order.complete = True
+        order.address = Address.objects.get(id = request.POST.get('address'))
+        order.payment_method = PaymentMethod.objects.get(id = request.POST.get('payment'))
+        order.receive_date = request.POST.get('date')
+
+        post_time_hour = str(request.POST.get('time'))[:2]
+        post_time_minute = str(request.POST.get('time'))[-2:]
+        order.recieve_time = f"{post_time_hour}:{post_time_minute}"
+
+        order.save()
+    
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order_items = order.ordereditem_set.all()
+        addresses = customer.address_set.all()
+        payment_methods = PaymentMethod.objects.all()
+        context = {'order':order, 'order_items':order_items, 'addresses':addresses, 'payment_methods': payment_methods}
+
     return render(request, 'customer/checkout.html', context)

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -11,12 +12,12 @@ class Customer(models.Model):
     def __str__(self):
         return self.first_name + " " + self.last_name
 
-class Cashier(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    email = models.EmailField(max_length=100)
+# class Cashier(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     email = models.EmailField(max_length=100)
     
-    def __str__(self):
-        return self.email
+#     def __str__(self):
+#         return self.email
 
 class Driver(models.Model):
     name = models.CharField(max_length=80)
@@ -38,40 +39,45 @@ class Address(models.Model):
     def __str__(self):
         return f"{self.street_address}, {self.barangay}, {self.city} {self.zip_code}"
 
-class Order(models.Model):
-    PAYMENT_METHOD = (
-        ("GCash", "GCash"),
-        ("Cash On Delivery", "Cash On Delivery"),
-        ("Cash On Pickup", "Cash On Pickup")
-    )
-
-    ORDER_STATUS = (
-        ("Order Sent", "Order Sent"),
-        ("Order Confirmed", "Order Confirmed"),
-        ("Payment Sent", "Payment Sent"),
-        ("Payment Confirmed", "Payment Confirmed"),
-        ("Ready for Pickup", "Ready for Pickup"),
-        ("To Be Delivered", "To Be Delivered"),
-        ("Order On The Way", "Order On The Way"),
-        ("Delivered", "Delivered")
-    )
-
-    order_date = models.DateTimeField(auto_now_add=True)
-    receive_date = models.DateTimeField()
-    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD)
-    order_status = models.CharField(max_length=20, choices=ORDER_STATUS)
-    proof_of_payment = models.ImageField(null=True, blank=True)
-    delivery_fee = models.DecimalField(max_digits=6, decimal_places=2)
-
-    # Foreign Keys
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
-    cashier = models.ForeignKey(Cashier, on_delete=models.SET_NULL, null=True, blank=True)
-    driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, blank=True)
-
+class PaymentMethod(models.Model):
+    method = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.pk
+        return self.method
+
+class OrderStatus(models.Model):
+    status = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.status
+
+class Order(models.Model):
+
+    order_date = models.DateTimeField(auto_now_add=True)
+    receive_date = models.DateField(null=True)
+    recieve_time = models.TimeField(null=True)
+    proof_of_payment = models.ImageField(null=True, blank=True)
+    delivery_fee = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+
+    #ecommerce
+    complete = models.BooleanField(default=False)
+
+    # Foreign Keys
+    payment_method = models.ForeignKey(PaymentMethod, on_delete=models.SET_NULL, null=True, blank=True)
+    order_status = models.ForeignKey(OrderStatus, on_delete=models.SET_NULL, null=True, default=OrderStatus.objects.get(id=1))
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
+    # cashier = models.ForeignKey(Cashier, on_delete=models.SET_NULL, null=True, blank=True)
+    driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, blank=True)
+
+    @property
+    def get_cart_total(self):
+        ordered_items = self.ordereditem_set.all()
+        total = sum([item.get_total for item in ordered_items])
+        return total
+
+    def __str__(self):
+        return str(self.pk)
 
 class Category(models.Model):
     name = models.CharField(max_length=44)
@@ -100,8 +106,13 @@ class OrderedItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
 
+    @property
+    def get_total(self):
+        total = self.item.price * self.quantity
+        return total
+
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
 
 class Delivery(models.Model):
