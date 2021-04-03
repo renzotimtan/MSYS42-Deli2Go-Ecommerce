@@ -7,20 +7,20 @@
     <div
       class="active breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center"
     >
-      <h6>1. Summary</h6>
+      <h6>1. Cart Summary</h6>
     </div>
     <div
       style="border-left-width: 0px"
       class="breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center"
     >
-      <h6>2. Address</h6>
+      <h6>2. Order Details</h6>
     </div>
-    <div
+    <!-- <div
       style="border-left-width: 0px"
       class="breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center"
     >
-      <h6>3. Payment</h6>
-    </div>
+      <h6>3. Order Summary</h6>
+    </div> -->
   </aside>
 
 
@@ -71,46 +71,36 @@
         </section>
         <!-- END -->
 
-        <!-- SECOND PAGE START -->
         
-        <div class="cart-left d-flex flex-column">
-        <div class="cart-address card-bg p-4">
-            <h5>Choose an Address:</h5>
-            <select name="address" class="py-2 px-1 w-auto mt-3" required>
-            {% for address in addresses %}
-                <option value={{address.id}}>{{address.street_address}}, {{address.barangay}}, {{address.city}}, {{address.zipcode}}</option>
-            {% endfor %} 
-            </select>
-        </div >
-        <div class="add-address card-bg p-4 mt-3">
-            <h5>Add a New Address</h5>
-        </div>
-        </div>
-        <!-- END -->
 
-        <!-- THIRD PAGE START -->
+
+        <!-- SECOND PAGE START -->
         <div class="cart-left card-bg p-4">
-        <div class="cart-payment">
-            <h5 class="mb-3">Payment Method:</h5>
-            
-            {% for payment_method in payment_methods %}
-                {% if payment_method.method == "Cash On Delivery" %}
-                <input type="radio" id={{payment_method.method}} name="payment" value={{payment_method.id}} checked>
-                {% else %}
-                <input type="radio" id={{payment_method.method}} name="payment" value={{payment_method.id}}>
-                {% endif %}
-                <label for={{payment_method.method}}>{{payment_method.method}}</label><br>
-            {% endfor %}
-        </div>
-
-            <div class="cart-pickup-date mt-4">
-            <h5 class="mb-3">Preferred Date of Delivery/Pick-up:</h5>
-            <input class="cart-date px-1 py-1" type="date" name="date" required>
+            <div class="cart-address">
+                <h5>Choose an Address:</h5>
+                <select name="address" class="py-2 px-2 w-auto mt-3" required>
+                    <option value="" selected disabled>Select Address</option>
+                {% for address in addresses %}
+                    <option value={{address.id}}>{{address.street_address}}, {{address.barangay}}, {{address.city}}, {{address.zipcode}}</option>
+                {% endfor %} 
+                </select>
+            </div >
+            <div class="cart-payment mt-4">
+                <h5 class="mb-3">Payment Method:</h5>
+                
+                {% for payment_method in payment_methods %}
+                    <input type="radio" id={{payment_method.method}} name="payment" value={{payment_method.id}}>
+                    <label for={{payment_method.method}}>{{payment_method.method}}</label><br>
+                {% endfor %}
             </div>
             <div class="cart-pickup-date mt-4">
-            <h5 class="mb-3">Preferred Time of Delivery/Pick-up:</h5>
-            <input class="cart-time px-1 py-1 me-2" type="time" name="time" id="" min="08:00" max="18:00" required>
-            <small>Office hours are 8am to 6pm</small>
+                <h5 class="mb-3">Preferred Date of Delivery/Pick-up:</h5>
+                <input class="cart-date px-1 py-1" type="date" name="date" required>
+            </div>
+            <div class="cart-pickup-date mt-4">
+                <h5 class="mb-3">Preferred Time of Delivery/Pick-up:</h5>
+                <input class="cart-time px-1 py-1 me-2" type="time" name="time" id="" min="08:00" max="18:00" required>
+                <small>Office hours are 8am to 6pm</small>
             </div>
         </div>
         <!-- END -->
@@ -142,6 +132,53 @@
         </div>
     </section>
   </form>
+
+<div class="add-address card-bg p-4 mt-3">
+    <h6 class="mb-4">Don't have an address?</h6>
+            <h5 class="mb-4">Add a New Address</h5>
+            <form method="POST">
+            {% csrf_token %}
+                <div class="add-address__content two-col-form my-1 mx-0">
+
+                    <div class="form-field">
+                        <div class="label">{{form.street_address.label}}:</div>
+                        {{form.street_address}}
+                    </div>
+
+                    <div class="form-field">
+                        <div class="label">{{form.barangay.label}}:</div>
+                        {{form.barangay}}
+                    </div>
+
+                    <div class="form-field">
+                        <div class="label">{{form.city.label}}:</div>
+                        {{form.city}}
+                    </div>
+
+                    <div class="form-field">
+                        <div class="label">{{form.zip_code.label}}:</div>
+                        {{form.zip_code}}
+                    </div>
+
+                    <div class="form-field">
+                        <div class="label">{{form.home_phone.label}}:</div>
+                        {{form.home_phone}}
+                    </div>
+
+                    <div class="form-field">
+                        {{form.customer}}
+                    </div>
+
+                    <div class="submit d-flex justify-content-end align-items-end">
+                        <input
+                            class="add-items__submit bg-darkbrown text-white b-0 w-100 mt-1"
+                            type="submit"
+                            value="Submit"
+                        />
+                    </div>
+                </div>
+            </form>
+        </div>
 </main>
 
 <script>
@@ -151,6 +188,7 @@
   const next = document.querySelector('.checkout-next');
   const back = document.querySelector('.checkout-back');
   const submit = document.querySelector('.checkout-submit')
+  const addAddress = document.querySelector('.add-address')
 
   document.querySelector(".checkout-next").addEventListener('click', (e) => {
     e.preventDefault()
@@ -190,8 +228,12 @@
 
   const refresh = () => {
     handleBreadcrumb();
-    console.log(counter)
     switchPage();
+    if (counter !== 1) {
+        addAddress.classList.add('d-none')
+    } else {
+        addAddress.classList.remove('d-none')
+    }
   };
 
   refresh();

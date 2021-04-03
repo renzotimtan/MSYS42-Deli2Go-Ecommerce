@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from cashier.models import *
 from .filters import ItemFilter
+from .forms import AddressForm
 
 # Create your views here.
 def shop(request):
@@ -26,27 +27,42 @@ def view_item(request, pk):
 def checkout(request):
     context = {}
 
-    if request.method == "POST":
-        order = Order.objects.get(customer=request.user.customer, complete=False)
-
-        order.complete = True
-        order.address = Address.objects.get(id = request.POST.get('address'))
-        order.payment_method = PaymentMethod.objects.get(id = request.POST.get('payment'))
-        order.receive_date = request.POST.get('date')
-
-        post_time_hour = str(request.POST.get('time'))[:2]
-        post_time_minute = str(request.POST.get('time'))[-2:]
-        order.recieve_time = f"{post_time_hour}:{post_time_minute}"
-
-        order.save()
-    
-
     if request.user.is_authenticated:
         customer = request.user.customer
+        form = AddressForm(initial={'customer': customer})
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         order_items = order.ordereditem_set.all()
         addresses = customer.address_set.all()
         payment_methods = PaymentMethod.objects.all()
-        context = {'order':order, 'order_items':order_items, 'addresses':addresses, 'payment_methods': payment_methods}
+        context = {
+            'order':order, 
+            'order_items':order_items, 
+            'addresses':addresses, 
+            'payment_methods': payment_methods,
+            'form':form,
+        }      
+    
+    if request.method == "POST":
+        if 'barangay' in request.POST:
+            print('address part')
+            customer = request.user.customer
+            form = AddressForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('checkout')
+        elif 'payment' in request.POST:
+            order = Order.objects.get(customer=request.user.customer, complete=False)
+
+            order.complete = True
+            order.address = Address.objects.get(id = request.POST.get('address'))
+            order.payment_method = PaymentMethod.objects.get(id = request.POST.get('payment'))
+            order.receive_date = request.POST.get('date')
+
+            post_time_hour = str(request.POST.get('time'))[:2]
+            post_time_minute = str(request.POST.get('time'))[-2:]
+            order.recieve_time = f"{post_time_hour}:{post_time_minute}"
+
+            order.save()
+            return redirect('shop')
 
     return render(request, 'customer/checkout.html', context)
