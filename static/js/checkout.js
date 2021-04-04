@@ -90,14 +90,12 @@ let dtTomorrow = new Date();
 dtTomorrow.setDate(new Date().getDate() + 1);
 const twoWeeks = new Date(Date.now() + 12096e5);
 
-
 const convertedDtToday = configureDate(dtToday).date;
-const convertedDtTomorrow = configureDate(dtTomorrow).date
+const convertedDtTomorrow = configureDate(dtTomorrow).date;
 const convertedTwoWeeks = configureDate(twoWeeks).date;
 const convertedTime = configureDate(dtToday).time;
 
 cartDate.setAttribute('min', convertedDtToday);
-cartDate.setAttribute('value', convertedDtToday);
 cartDate.setAttribute('max', convertedTwoWeeks);
 
 let setDateTimeMins = () => {
@@ -108,26 +106,24 @@ let setDateTimeMins = () => {
         )
     ) {
         cartTime.setAttribute('min', convertedTime);
-    } 
+    }
 
-    // If 12am - 7am, set the minimum time to 8am 
+    // If 12am - 7am, set the minimum time to 8am
     else if (
         ['00', '01', '02', '03', '04', '05', '06', '07'].some((v) =>
             convertedTime.includes(v)
         )
     ) {
-        cartTime.setAttribute('min', '08:00')
-    } 
-    
+        cartTime.setAttribute('min', '08:00');
+    }
+
     // If 6pm-11pm, set the minimum date to tomorrow and minimum time to 8am
     else {
         cartTime.setAttribute('min', '08:00');
         cartDate.setAttribute('min', convertedDtTomorrow);
         cartDate.setAttribute('value', convertedDtTomorrow);
     }
-}
-
-setDateTimeMins()
+};
 
 cartDate.addEventListener('change', (e) => {
     if (e.target.value === convertedDtToday) {
@@ -143,9 +139,11 @@ const deliveryFee = document.querySelector('.delivery-fee');
 const totalAmount = document.querySelector('.total-amount');
 
 const refreshTotal = () => {
-    totalAmount.textContent =
-        parseInt(orderTotal.textContent) + parseInt(deliveryFee.textContent);
+    totalAmount.textContent = (
+        parseFloat(orderTotal.textContent) + parseFloat(deliveryFee.textContent)
+    ).toFixed(2);
 };
+
 refreshTotal();
 
 const cartAddress = document.querySelector('.cart-address');
@@ -154,6 +152,7 @@ const detailDate = document.querySelector('.cart-detail-date');
 const detailTime = document.querySelector('.cart-detail-time');
 const detailPayment = document.querySelector('.cart-detail-payment');
 const detailAddress = document.querySelector('.cart-detail-address');
+
 const convertDate = (date) => {
     const months = [
         'January',
@@ -179,42 +178,47 @@ const convertTime = (time) => {
         let hour = parseInt(time.slice(0, 2));
         if (hour > 12) {
             return hour - 12 + time.slice(2) + ' PM';
+        } else if (hour === 12) {
+            return hour + time.slice(2) + ' PM';
         } else {
             return hour + time.slice(2) + ' AM';
         }
     }
 };
 
-detailDate.textContent = convertDate(cartDate.value);
-
-cartAddress.addEventListener('change', (e) => {
-    let selectedAddress = e.target.options[e.target.selectedIndex].text;
-    detailAddress.textContent = selectedAddress;
-
-    let deliveryCity = e.target.options[e.target.selectedIndex].dataset.city;
-    if (
-        cartPayment.options[cartPayment.selectedIndex].text !== 'Cash On Pickup'
-    ) {
+const checkAddressFee = () => {
+    let deliveryCity =
+        cartAddress.options[cartAddress.selectedIndex].dataset.city;
+    if (deliveryCity) {
         if (
             ['quezon city', 'san juan city'].includes(
                 deliveryCity.toLowerCase()
             )
         ) {
-            deliveryFee.textContent = '100';
+            deliveryFee.textContent = '100.00';
         } else {
-            deliveryFee.textContent = '150';
+            deliveryFee.textContent = '150.00';
         }
     }
+};
 
+cartAddress.addEventListener('change', (e) => {
+    let selectedAddress = e.target.options[e.target.selectedIndex].text;
+    detailAddress.textContent = selectedAddress;
+    if (
+        cartPayment.options[cartPayment.selectedIndex].text !== 'Cash On Pickup'
+    ) {
+        checkAddressFee();
+    }
     refreshTotal();
 });
 
-cartDate.addEventListener('change', (e) => {
+cartDate.addEventListener('change', () => {
     let convertedDate = convertDate(cartDate.value);
     detailDate.textContent = convertedDate;
 });
 
-cartTime.addEventListener('change', (e) => {
+cartTime.addEventListener('change', () => {
     let convertedTime = convertTime(cartTime.value);
     detailTime.textContent = convertedTime;
 });
@@ -224,6 +228,9 @@ cartPayment.addEventListener('change', (e) => {
     detailPayment.textContent = selectedPayment;
 
     if (selectedPayment == 'Cash On Pickup') {
-        document.querySelector('.delivery-fee').textContent = '0';
+        deliveryFee.textContent = '0.00';
+    } else {
+        checkAddressFee();
     }
+    refreshTotal();
 });
