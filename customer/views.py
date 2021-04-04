@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from cashier.models import *
 from .filters import ItemFilter
 from .forms import AddressForm
+from django.contrib import messages
 
 # Create your views here.
 def shop(request):
@@ -44,12 +45,19 @@ def checkout(request):
     
     if request.method == "POST":
         if 'barangay' in request.POST:
-            print('address part')
             customer = request.user.customer
             form = AddressForm(request.POST)
             if form.is_valid():
-                form.save()
-                return redirect('checkout')
+                home_phone = form.cleaned_data.get("home_phone")
+                zip_code = form.cleaned_data.get("zip_code")
+                if not home_phone.isnumeric():
+                    messages.error(request, "Error - Phone Number is not valid")
+                elif not zip_code.isnumeric():
+                    messages.error(request, "Error - Zip Code is not valid")
+                else:
+                    form.save()
+
+
         elif 'payment' in request.POST:
             order = Order.objects.get(customer=request.user.customer, complete=False)
 

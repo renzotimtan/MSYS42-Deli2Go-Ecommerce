@@ -1,33 +1,36 @@
-{% extends 'base.html' %} {% load static %} {% block topbar %}
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
 <h4>Checkout</h4>
-{% endblock topbar %} {% block content %}
+{% endblock topbar %} 
+
+{% block content %}
 <main class="container mt-5">
   <h4>Shopping Cart Summary</h4>
-  <aside class="breadcrumbs-bar d-flex mt-4">
-    <div
-      class="active breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center"
-    >
-      <h6>1. Cart Summary</h6>
-    </div>
-    <div
-      style="border-left-width: 0px"
-      class="breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center"
-    >
-      <h6>2. Order Details</h6>
-    </div>
-    <!-- <div
-      style="border-left-width: 0px"
-      class="breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center"
-    >
-      <h6>3. Order Summary</h6>
-    </div> -->
+  
+  {% for message in messages %}
+      <div class="alert alert-danger mt-4" role="alert">
+        {{ message }}
+      </div>
+  {% endfor %}
+      
+  
+  
+  {% if order_items %}
+    <aside class="breadcrumbs-bar d-flex mt-4">
+        <div class="active breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center">
+            <h6>1. Cart Summary</h6>
+        </div>
+        <div style="border-left-width: 0px" class="breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center">
+            <h6>2. Order Details</h6>
+        </div>
   </aside>
-
-
+  {% endif %}
+      
   <form method="POST">
       {% csrf_token %}
     <section
-        class="cart-content d-lg-flex justify-content-between align-items-start mt-5"
+        class="cart-content d-lg-flex justify-content-between align-items-start my-5"
     >
 
         <!-- FIRST PAGE START -->
@@ -43,12 +46,16 @@
         {% for order_item in order_items %}
         <div class=" cart-row mb-4 d-flex">
             <div class="flex-2">
-            <img class="row-image" src={{order_item.item.image.url}} alt="" />
+                <img class="row-image" src={{order_item.item.image.url}} alt="" />
             </div>
-            <div class="flex-2"><p>{{order_item.item.name}}</p></div>
-            <div class="flex-1"><p>{{order_item.item.price}}</p></div>
+            <div class="flex-2">
+                <p>{{order_item.item.name}}</p>
+            </div>
+            <div class="flex-1">
+                <p>{{order_item.item.price}}</p>
+            </div>
             <div class="flex-1 d-flex">
-            <p class="me-3">x {{order_item.quantity}}</p>
+                <p class="me-3">x {{order_item.quantity}}</p>
             <div class="quantity d-flex flex-column justify-content-start">
                 <img
                 data-product="1"
@@ -72,13 +79,12 @@
         <!-- END -->
 
         
-
-
-        <!-- SECOND PAGE START -->
+        {% if order_items %}
+            <!-- SECOND PAGE START -->
         <div class="cart-left card-bg p-4">
             <div class="cart-address">
                 <h5>Choose an Address:</h5>
-                <select name="address" class="py-2 px-2 w-auto mt-3" required>
+                <select name="address" class="cart-address py-2 px-2 w-50 mt-3" required>
                     <option value="" selected disabled>Select Address</option>
                 {% for address in addresses %}
                     <option value={{address.id}}>{{address.street_address}}, {{address.barangay}}, {{address.city}}, {{address.zipcode}}</option>
@@ -106,34 +112,43 @@
         <!-- END -->
         
         <div class="cart-right d-flex flex-column">
-        <div class="order-summary card-bg p-4 w-100 mt-3 m-lg-0">
-            <h4>Order Summary</h4>
-            <hr />
-            <p class="d-flex justify-content-between"><strong>Order Total:</strong><span> &#8369; {{order.get_cart_total}}</span</p>
-            <p class="mt-2 d-flex justify-content-between"><strong>Delivery Fee:</strong><span> &#8369; 100</span></p>
-            <hr>
-            <p class="mt-2 d-flex justify-content-between"><strong>Total Amount:</strong><span> &#8369; 460</span></p>
+            <div class="order-summary card-bg p-4 w-100 mt-3 m-lg-0">
+                <h4>Order Summary</h4>
+                <hr />
+                <p class="d-flex justify-content-between"><strong>Order Total:</strong><span> &#8369; {{order.get_cart_total}}</span</p>
+                <p class="mt-2 d-flex justify-content-between"><strong>Delivery Fee:</strong><span> &#8369; 100</span></p>
+                <hr>
+                <p class="mt-2 d-flex justify-content-between"><strong>Total Amount:</strong><span> &#8369; 460</span></p>
             </div>
-        <div class="d-flex justify-content-center align-items-center">
-            <button
-            class="checkout-back w-100 bg-sienna text-white p-3 rounded mt-4 me-3"
-            >
-            Back
-            </button>
-            <button
-            class="checkout-next w-100 bg-darkbrown text-white p-3 rounded mt-4 ml-3"
-            >
-            Next
-            </button>
-            <input type="submit"
-            class="checkout-submit w-100 bg-darkbrown text-white p-3 rounded mt-4 ml-3" value="Submit"
-            />
-        </div>
+            <div class="card-bg p-4 w-100 mt-3">
+                <h4>Order Details</h4>
+                <hr />
+                <p><strong>Address:</strong></p>
+                <div class="cart-detail-address">None</div>
+                <p class="mt-2 d-flex justify-content-between"><strong>Payment Method:</strong><span> &#8369; 100</span></p>
+                <p class="mt-2 d-flex justify-content-between"><strong>Date:</strong><span class="cart-detail-date"></span></p>
+                <p class="mt-2 d-flex justify-content-between"><strong>Time:</strong><span class="cart-detail-time"></span></p>
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+                <button
+                class="checkout-back w-100 bg-sienna text-white p-3 rounded mt-4 me-3"
+                >
+                Back
+                </button>
+                <button
+                class="checkout-next w-100 bg-darkbrown text-white p-3 rounded mt-4 ml-3"
+                >
+                Next
+                </button>
+                <input type="submit"
+                class="checkout-submit w-100 bg-darkbrown text-white p-3 rounded mt-4 ml-3" value="Submit"
+                />
+            </div>
         </div>
     </section>
   </form>
 
-<div class="add-address card-bg p-4 mt-3">
+<div class="add-address card-bg p-4 my-5">
     <h6 class="mb-4">Don't have an address?</h6>
             <h5 class="mb-4">Add a New Address</h5>
             <form method="POST">
@@ -179,121 +194,8 @@
                 </div>
             </form>
         </div>
+        {% endif %}
 </main>
 
-<script>
-  let counter = 0;
-  const breadSection = document.querySelectorAll('.breadcrumb-section');
-  const pages = document.querySelectorAll('.cart-left')
-  const next = document.querySelector('.checkout-next');
-  const back = document.querySelector('.checkout-back');
-  const submit = document.querySelector('.checkout-submit')
-  const addAddress = document.querySelector('.add-address')
-
-  document.querySelector(".checkout-next").addEventListener('click', (e) => {
-    e.preventDefault()
-  })
-  document.querySelector(".checkout-back").addEventListener('click', (e) => {
-    e.preventDefault()
-  })
-
-  // BREADCRUMB START--------------------------------
-  const handleBreadcrumb = () => {
-    for (let section of breadSection) {
-      section.classList.remove('active');
-      breadSection[counter].classList.add('active');
-    }
-
-    if (counter === 0) {
-      back.classList.add('d-none');
-    } else {
-      back.classList.remove('d-none');
-    }
-
-    if (counter === breadSection.length - 1) {
-      next.classList.add('d-none');
-      submit.classList.remove('d-none')
-    } else {
-      next.classList.remove('d-none');
-      submit.classList.add('d-none')
-    }
-  }
-
-  const switchPage = () => {
-    for (let page of pages) {
-      page.classList.add('d-none');
-    }
-    pages[counter].classList.remove('d-none')
-  }
-
-  const refresh = () => {
-    handleBreadcrumb();
-    switchPage();
-    if (counter !== 1) {
-        addAddress.classList.add('d-none')
-    } else {
-        addAddress.classList.remove('d-none')
-    }
-  };
-
-  refresh();
-
-  next.addEventListener('click', () => {
-    counter++;
-    refresh();
-  });
-
-  back.addEventListener('click', () => {
-    counter--;
-    refresh();
-  });
-
-  // BREADCRUMB END--------------------------------
-
-
-  // DATEFIELD START--------------------------------
-  const configureDate = date => {
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    const year = date.getFullYear();
-
-    const hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
-    const time = hours + ":" + date.getMinutes()
-  
-    if(month < 10) month = '0' + month.toString();
-    if(day < 10) day = '0' + day.toString();
-
-    const convertedDate = year + '-' + month + '-' + day;
-    return {time, date: convertedDate};
-  }
-
-  const cartDate = document.querySelector(".cart-date")
-  const cartTime = document.querySelector(".cart-time")
-  const dtToday = new Date();
-  const twoWeeks = new Date(Date.now() + 12096e5);
-
-  const convertedDtToday = configureDate(dtToday).date
-  const convertedTwoWeeks = configureDate(twoWeeks).date
-  const convertedTime = configureDate(dtToday).time
-
-  cartDate.setAttribute('min', convertedDtToday)
-  cartDate.setAttribute('value', convertedDtToday)
-  cartDate.setAttribute('max', convertedTwoWeeks)
-
-  if (["08", "09", "10", "11", "12", "13", "14", "15", "16", "17"].some((v) => convertedTime.includes(v))) {
-      cartTime.setAttribute('min', convertedTime)
-      cartTime.setAttribute('value', convertedTime)
-  } else {
-      cartTime.setAttribute('min', "08:00")
-      cartTime.setAttribute('value', "08:00")
-  }
-  
-  cartDate.addEventListener('change', (e) => {
-      if (e.target.value === convertedDtToday) {
-          cartTime.setAttribute('min', configureDate(dtToday).time)
-      } else {
-          cartTime.setAttribute('min', '08:00')
-      }
-  })
-</script>
+<script src="{% static 'js/checkout.js' %}"></script>
 {% endblock content %}

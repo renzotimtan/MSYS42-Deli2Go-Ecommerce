@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import RegexValidator
 import datetime
 
 class Customer(models.Model):
@@ -32,7 +31,7 @@ class Address(models.Model):
     barangay = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     zip_code = models.CharField(max_length=4)
-    home_phone = models.CharField(max_length=8, validators=[RegexValidator(r'^[0-9]+$')])
+    home_phone = models.CharField(max_length=8)
 
     # Foreign Key
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
