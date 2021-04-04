@@ -56,6 +56,7 @@ def checkout(request):
                     messages.error(request, "Error - Zip Code is not valid")
                 else:
                     form.save()
+                    messages.success(request, "Success - New Address has been created")
 
 
         elif 'payment' in request.POST:
@@ -80,6 +81,8 @@ def checkout(request):
             order.recieve_time = f"{post_time_hour}:{post_time_minute}"
 
             order.save()
+            messages.success(request, "Success - Order has been sent")
             return redirect('shop')
+            
 
     return render(request, 'customer/checkout.html', context)

@@ -5,6 +5,11 @@
 {% endblock topbar %} 
 
 {% block content %}
+{% for message in messages %}
+      <div class="alert alert-{{message.tags}} mt-4 container" role="alert">
+        {{ message }}
+      </div>
+{% endfor %}
 <main class="shop container mt-5">
   <aside class="shop-filter">
     <h4>Filter Items</h4>
