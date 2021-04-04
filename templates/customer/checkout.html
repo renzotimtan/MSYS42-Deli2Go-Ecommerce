@@ -87,17 +87,18 @@
                 <select name="address" class="cart-address py-2 px-2 w-50 mt-3" required>
                     <option value="" selected disabled>Select Address</option>
                 {% for address in addresses %}
-                    <option value={{address.id}}>{{address.street_address}}, {{address.barangay}}, {{address.city}}, {{address.zipcode}}</option>
+                    <option value={{address.id}} data-city="{{address.city}}">{{address.street_address}}, {{address.barangay}}, {{address.city}}, {{address.zip_code}}</option>
                 {% endfor %} 
                 </select>
             </div >
-            <div class="cart-payment mt-4">
-                <h5 class="mb-3">Payment Method:</h5>
-                
+            <div class="mt-4">
+                <h5>Payment Method:</h5>
+                <select name="payment" class="cart-payment py-2 px-2 w-50 mt-3" required>
+                    <option value="" selected disabled>Select Payment Method</option>
                 {% for payment_method in payment_methods %}
-                    <input type="radio" id={{payment_method.method}} name="payment" value={{payment_method.id}}>
-                    <label for={{payment_method.method}}>{{payment_method.method}}</label><br>
+                    <option value={{payment_method.id}}>{{payment_method.method}}</option>
                 {% endfor %}
+                </select>
             </div>
             <div class="cart-pickup-date mt-4">
                 <h5 class="mb-3">Preferred Date of Delivery/Pick-up:</h5>
@@ -106,7 +107,7 @@
             <div class="cart-pickup-date mt-4">
                 <h5 class="mb-3">Preferred Time of Delivery/Pick-up:</h5>
                 <input class="cart-time px-1 py-1 me-2" type="time" name="time" id="" min="08:00" max="18:00" required>
-                <small>Office hours are 8am to 6pm</small>
+                <small>Office hours are 8am to 5pm</small>
             </div>
         </div>
         <!-- END -->
@@ -115,19 +116,19 @@
             <div class="order-summary card-bg p-4 w-100 mt-3 m-lg-0">
                 <h4>Order Summary</h4>
                 <hr />
-                <p class="d-flex justify-content-between"><strong>Order Total:</strong><span> &#8369; {{order.get_cart_total}}</span</p>
-                <p class="mt-2 d-flex justify-content-between"><strong>Delivery Fee:</strong><span> &#8369; 100</span></p>
+                <p class="d-flex justify-content-between"><strong>Order Total:</strong><span> &#8369; <span class="order-total">{{order.get_cart_total}}</span></span</p>
+                <p class="mt-2 d-flex justify-content-between"><strong>Delivery Fee:</strong><span> &#8369; <span class="delivery-fee">100</span></span></p>
                 <hr>
-                <p class="mt-2 d-flex justify-content-between"><strong>Total Amount:</strong><span> &#8369; 460</span></p>
+                <p class="mt-2 d-flex justify-content-between"><strong>Total Amount:</strong><span> &#8369; <span class="total-amount">460</span></span></p>
             </div>
             <div class="card-bg p-4 w-100 mt-3">
                 <h4>Order Details</h4>
                 <hr />
                 <p><strong>Address:</strong></p>
                 <div class="cart-detail-address">None</div>
-                <p class="mt-2 d-flex justify-content-between"><strong>Payment Method:</strong><span> &#8369; 100</span></p>
+                <p class="mt-2 d-flex justify-content-between"><strong>Payment Method:</strong><span class="cart-detail-payment">None</span></p>
                 <p class="mt-2 d-flex justify-content-between"><strong>Date:</strong><span class="cart-detail-date"></span></p>
-                <p class="mt-2 d-flex justify-content-between"><strong>Time:</strong><span class="cart-detail-time"></span></p>
+                <p class="mt-2 d-flex justify-content-between"><strong>Time:</strong><span class="cart-detail-time">None</span></p>
             </div>
             <div class="d-flex justify-content-center align-items-center">
                 <button

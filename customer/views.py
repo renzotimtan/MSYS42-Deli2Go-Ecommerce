@@ -66,6 +66,15 @@ def checkout(request):
             order.payment_method = PaymentMethod.objects.get(id = request.POST.get('payment'))
             order.receive_date = request.POST.get('date')
 
+            # Delivery Fee Logic
+            if (order.payment_method.method != "Cash On Pickup"):
+                if (order.address.city.lower() in ["quezon city", "san juan city"]):
+                    order.delivery_fee = 100.00
+                else:
+                    order.delivery_fee = 150.00
+            else:
+                order.delivery_fee = 0.00
+        
             post_time_hour = str(request.POST.get('time'))[:2]
             post_time_minute = str(request.POST.get('time'))[-2:]
             order.recieve_time = f"{post_time_hour}:{post_time_minute}"
