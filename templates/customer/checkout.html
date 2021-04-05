@@ -8,14 +8,6 @@
 <main class="container mt-5">
   <h4>Shopping Cart Summary</h4>
   
-  {% for message in messages %}
-      <div class="alert alert-{{message.tags}} mt-4" role="alert">
-        {{ message }}
-      </div>
-  {% endfor %}
-      
-  
-  
   {% if order_items %}
     <aside class="breadcrumbs-bar d-flex mt-4">
         <div class="active breadcrumb-section text-darkbrown w-100 d-flex justify-content-center align-items-center">

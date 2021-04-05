@@ -11,11 +11,6 @@
 {% block content %}
 <main class="add-items container my-5">
   <h4>New Item</h4>
-  {% for message in messages %}
-  <div class="alert alert-danger mt-3 text-center" role="alert">
-    {{ message }}
-  </div>
-  {% endfor %}
   <div class="add-items__content mt-4">
     <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}

@@ -68,6 +68,12 @@ button {
     color: #ffffff;
 }
 
+.alert-error {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+
 .text-darkbrown {
     color: var(--darkbrown);
 }
@@ -115,6 +121,10 @@ button {
 
 .nav-content__logo img {
     height: 90%;
+}
+
+.nav-content__links a:hover {
+    color: #b4b4b4 !important;
 }
 
 .nav-content__links {
@@ -210,6 +220,7 @@ button {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 100px;
+    margin-top: 70px;
 }
 
 .item img {

@@ -88,7 +88,7 @@ class Category(models.Model):
 class Item(models.Model):
     image = models.ImageField(null=True, blank=True)
     name = models.CharField(max_length=20)
-    description = models.CharField(max_length=500, blank=True)
+    description = models.TextField(max_length=500, blank=True)
     brand = models.CharField(max_length=50)
     stock = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
@@ -100,7 +100,7 @@ class Item(models.Model):
         return self.name
 
 class OrderedItem(models.Model):
-    quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(default=0)
 
     # Foreign Keys
     order = models.ForeignKey(Order, on_delete=models.CASCADE)

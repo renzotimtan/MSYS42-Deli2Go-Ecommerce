@@ -128,6 +128,9 @@ let setDateTimeMins = () => {
 cartDate.addEventListener('change', (e) => {
     if (e.target.value === convertedDtToday) {
         setDateTimeMins();
+    } else {
+        cartTime.setAttribute('min', '08:00');
+        cartDate.setAttribute('min', convertedDtToday)
     }
 });
 
@@ -153,6 +156,7 @@ const detailTime = document.querySelector('.cart-detail-time');
 const detailPayment = document.querySelector('.cart-detail-payment');
 const detailAddress = document.querySelector('.cart-detail-address');
 
+// COVERTING DATE AND TIME
 const convertDate = (date) => {
     const months = [
         'January',
@@ -185,6 +189,7 @@ const convertTime = (time) => {
         }
     }
 };
+// ------------------------
 
 const checkAddressFee = () => {
     let deliveryCity =
