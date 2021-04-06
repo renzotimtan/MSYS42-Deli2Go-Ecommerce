@@ -1,72 +1,4 @@
-let counter = 0;
-const breadSection = document.querySelectorAll('.breadcrumb-section');
-const pages = document.querySelectorAll('.cart-left');
-const next = document.querySelector('.checkout-next');
-const back = document.querySelector('.checkout-back');
-const submit = document.querySelector('.checkout-submit');
-const addAddress = document.querySelector('.add-address');
-
-document.querySelector('.checkout-next').addEventListener('click', (e) => {
-    e.preventDefault();
-});
-document.querySelector('.checkout-back').addEventListener('click', (e) => {
-    e.preventDefault();
-});
-
-// BREADCRUMB START--------------------------------
-const handleBreadcrumb = () => {
-    for (let section of breadSection) {
-        section.classList.remove('active');
-        breadSection[counter].classList.add('active');
-    }
-
-    if (counter === 0) {
-        back.classList.add('d-none');
-    } else {
-        back.classList.remove('d-none');
-    }
-
-    if (counter === breadSection.length - 1) {
-        next.classList.add('d-none');
-        submit.classList.remove('d-none');
-    } else {
-        next.classList.remove('d-none');
-        submit.classList.add('d-none');
-    }
-};
-
-const switchPage = () => {
-    for (let page of pages) {
-        page.classList.add('d-none');
-    }
-    pages[counter].classList.remove('d-none');
-};
-
-const refresh = () => {
-    handleBreadcrumb();
-    switchPage();
-    if (counter !== 1) {
-        addAddress.classList.add('d-none');
-    } else {
-        addAddress.classList.remove('d-none');
-    }
-};
-
-refresh();
-
-next.addEventListener('click', () => {
-    counter++;
-    refresh();
-});
-
-back.addEventListener('click', () => {
-    counter--;
-    refresh();
-});
-
-// BREADCRUMB END--------------------------------
-
-// DATEFIELD START--------------------------------
+// CONFIGURE DATE AND TIME FIELD START--------------------------------
 const configureDate = (date) => {
     let month = date.getMonth() + 1;
     let day = date.getDate();
@@ -130,11 +62,11 @@ cartDate.addEventListener('change', (e) => {
         setDateTimeMins();
     } else {
         cartTime.setAttribute('min', '08:00');
-        cartDate.setAttribute('min', convertedDtToday)
+        cartDate.setAttribute('min', convertedDtToday);
     }
 });
 
-// DATEFIELD END--------------------------------
+
 
 // ORDER DETAILS START--------------------------------
 const orderTotal = document.querySelector('.order-total');
@@ -156,7 +88,7 @@ const detailTime = document.querySelector('.cart-detail-time');
 const detailPayment = document.querySelector('.cart-detail-payment');
 const detailAddress = document.querySelector('.cart-detail-address');
 
-// COVERTING DATE AND TIME
+// COVERTING DATE AND TIME FOR 
 const convertDate = (date) => {
     const months = [
         'January',

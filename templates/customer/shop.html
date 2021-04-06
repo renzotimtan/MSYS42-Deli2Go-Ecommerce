@@ -1,10 +1,10 @@
-{% extends 'base.html' %} {% load static %} {% block topbar %}
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
 <h4>Shop</h4>
-{% endblock topbar %} {% block content %} {% for message in messages %}
-<div class="alert alert-{{message.tags}} mt-4 container" role="alert">
-    {{ message }}
-</div>
-{% endfor %}
+{% endblock topbar %} 
+
+{% block content %} 
 <main class="shop container mt-5">
     <aside class="shop-filter">
         <h4>Filter Items</h4>

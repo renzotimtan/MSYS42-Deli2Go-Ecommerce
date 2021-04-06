@@ -103,7 +103,7 @@ def checkout(request):
             order.save()
 
             # Message success
-            messages.success(request, "Success - Order has been sent")
+            messages.success(request, "Order has been sent")
             return redirect('shop')
             
 
@@ -112,7 +112,16 @@ def checkout(request):
 def update_item(request):
     data = json.loads(request.body)
     itemId = data['item']
-    quantity = data['quantity']
+
+    if data.get('quantity'):
+        quantity = data['quantity']
+    else:
+        quantity = 1
+
+    if data.get('action'):
+        action = data['action']
+    else:
+        action = "add"
 
     if request.user.is_authenticated:
         customer = request.user.customer
@@ -124,21 +133,32 @@ def update_item(request):
         # check if order and item has been made
         ordered_item, created = OrderedItem.objects.get_or_create(order=order, item=item)
 
-        print(ordered_item)
+        if action == "add":
 
-        # add quantity, subtract stock
+            # If more than stock, error
+            if (int(quantity) > item.stock) or (not int(quantity)):
+                messages.error(request, "Error - Exceeded stock.")
+                return JsonResponse("Exceeded stock", safe=False)
+            else:
+                # add quantity, subtract stock
+                ordered_item.quantity += int(quantity)
+                item.stock -= int(quantity)
+                
+                ordered_item.save()
+                item.save()
+                messages.success(request, f"{item.name} was successfully added to cart")
+            
+        elif action == "remove":
+            ordered_item.quantity -= int(quantity)
+            item.stock += int(quantity)
 
+            # If quantity is 0, remove ordered_item
+            if ordered_item.quantity <= 0:
+                ordered_item.delete()
+            else:
+                ordered_item.save()
+                item.save()
+                
+            messages.success(request, f"{item.name} was successfully removed from cart")
 
-        if (int(quantity) > item.stock) or (not int(quantity)):
-            messages.error(request, "Error - Please enter valid quantity.")
-            return JsonResponse("Exceeded stock", safe=False)
-
-        ordered_item.quantity += int(quantity)
-        item.stock -= int(quantity)
-
-        #save
-        ordered_item.save()
-        item.save()
-        messages.success(request, "Success - Added to Cart")
-
-    return JsonResponse("Item was added", safe=False)
+    return JsonResponse("Cart Updated.", safe=False)
