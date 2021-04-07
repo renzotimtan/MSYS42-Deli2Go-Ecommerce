@@ -6,4 +6,6 @@ urlpatterns = [
     path('item/<str:pk>/', views.view_item, name="view-item"),
     path('checkout/', views.checkout, name="checkout"),
     path('update_item/', views.update_item, name="update-item"),
+    path('login/', views.login, name="login"),
+    path('register/', views.register, name="register"),
 ]

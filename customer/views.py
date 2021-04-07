@@ -6,7 +6,15 @@ from django.contrib import messages
 import json
 from django.http import JsonResponse
 
-# Create your views here.
+
+def login(request):
+    context = {}
+    return render(request, 'customer/login.html')
+
+def register(request):
+    context = {}
+    return render(request, 'customer/register.html')
+
 def shop(request):
     # Filter Items
     items = Item.objects.all()

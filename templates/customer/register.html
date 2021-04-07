@@ -1,0 +1,68 @@
+{% extends 'base.html' %} {% load static %} {% block topbar %}
+<h4>My Account</h4>
+{% endblock topbar %} {% block content %}
+<main class="auth">
+    <section class="auth-register">
+        <form
+            action=""
+            method="POST"
+            class="auth-register__form card-bg mt-3 d-flex justify-content-center align-items-start"
+        >
+            {% csrf_token %}
+            <div class="auth-register__content">
+                <h2 class="text-center mb-4">Register</h2>
+                <div class="auth-register__form-fields two-col-form">
+                    <div class="form-field">
+                        <div class="label">
+                            <label for="text">First Name</label>
+                        </div>
+                        <input class="mt-2" type="text" />
+                    </div>
+
+                    <div class="form-field">
+                        <div class="label">
+                            <label for="text">Last Name</label>
+                        </div>
+                        <input class="mt-2" type="text" />
+                    </div>
+
+                    <div class="form-field">
+                        <div class="label">
+                            <label for="email">Password</label>
+                        </div>
+                        <input class="mt-2" type="password" />
+                    </div>
+
+                    <div class="form-field">
+                        <div class="label">
+                            <label for="email">Confirm Password</label>
+                        </div>
+                        <input class="mt-2" type="password" />
+                    </div>
+
+                    <div class="form-field">
+                        <div class="label">
+                            <label for="email">Email</label>
+                        </div>
+                        <input class="mt-2" type="text" />
+                    </div>
+
+                    <div class="form-field">
+                        <div class="label">
+                            <label for="text">Mobile Phone</label>
+                        </div>
+                        <input class="mt-2" type="text" />
+                    </div>
+                </div>
+
+                <button
+                    class="auth-register__submit bg-darkbrown text-white mx-auto d-block w-50"
+                >
+                    Register
+                </button>
+            </div>
+        </form>
+    </section>
+</main>
+
+{% endblock content %}

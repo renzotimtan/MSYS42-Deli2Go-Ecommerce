@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
+<h4>My Account</h4>
+{% endblock topbar %} 
+
+{% block content %}
+<main class="auth container">
+    <section class="auth-login">
+        <form
+            action=""
+            method="POST"
+            class="auth-register__form card-bg mt-3 d-flex justify-content-center align-items-center"
+        >
+            {% csrf_token %}
+            <div class="auth-login__content">
+                <h2 class="text-center mb-4">Login</h2>
+                <div class="auth-login__form-fields">
+                    <div class="form-field">
+                        <div class="label">
+                            <label for="text">Email</label>
+                        </div>
+                        <input class="mt-2" type="text" />
+                    </div>
+
+                    <div class="form-field mt-3">
+                        <div class="label">
+                            <label for="text">Password</label>
+                        </div>
+                        <input class="mt-2" type="text" />
+                    </div>
+
+                </div>
+
+                <p class="mt-4">Don't have an account? <a href="{% url 'register' %}" class="text-decoration-underline">Register</a></p>
+                <button
+                    class="auth-login__submit bg-darkbrown text-white mx-auto d-block w-50"
+                >
+                    Login
+                </button>
+            </div>
+        </form>
+    </section>
+</main>
+
+{% endblock content %}
