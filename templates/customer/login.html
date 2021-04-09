@@ -1,16 +1,12 @@
-{% extends 'base.html' %} {% load static %} 
-
-{% block topbar %}
+{% extends 'base.html' %} {% load static %} {% block topbar %}
 <h4>My Account</h4>
-{% endblock topbar %} 
-
-{% block content %}
+{% endblock topbar %} {% block content %}
 <main class="auth container">
     <section class="auth-login">
         <form
             action=""
             method="POST"
-            class="auth-register__form card-bg mt-3 d-flex justify-content-center align-items-center"
+            class="auth-register__form card-bg mt-3 mb-2 d-flex justify-content-center align-items-center"
         >
             {% csrf_token %}
             <div class="auth-login__content">
@@ -18,21 +14,27 @@
                 <div class="auth-login__form-fields">
                     <div class="form-field">
                         <div class="label">
-                            <label for="text">Email</label>
+                            <label for="text">Username</label>
                         </div>
-                        <input class="mt-2" type="text" />
+                        <input name="username" class="mt-2" type="text" />
                     </div>
 
                     <div class="form-field mt-3">
                         <div class="label">
-                            <label for="text">Password</label>
+                            <label for="password">Password</label>
                         </div>
-                        <input class="mt-2" type="text" />
+                        <input name="password" class="mt-2" type="password" />
                     </div>
-
                 </div>
 
-                <p class="mt-4">Don't have an account? <a href="{% url 'register' %}" class="text-decoration-underline">Register</a></p>
+                <p class="mt-4">
+                    Don't have an account?
+                    <a
+                        href="{% url 'register' %}"
+                        class="text-decoration-underline"
+                        >Register</a
+                    >
+                </p>
                 <button
                     class="auth-login__submit bg-darkbrown text-white mx-auto d-block w-50"
                 >

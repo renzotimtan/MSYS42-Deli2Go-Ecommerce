@@ -1,19 +1,89 @@
 from django.shortcuts import render, redirect
+
+# models
 from cashier.models import *
+
+# filters
 from .filters import ItemFilter
-from .forms import AddressForm
+
+# forms
+from .forms import AddressForm, RegisterForm
+
+# messages
 from django.contrib import messages
+
+# json
 import json
 from django.http import JsonResponse
 
+#auth
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from .decorators import unauthenticated_user
 
-def login(request):
-    context = {}
+@unauthenticated_user
+def loginUser(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        # authenticate
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, "Login successful!")
+            return redirect('dashboard')
+        else:
+            messages.error(request, "Username or Password is incorrect")
     return render(request, 'customer/login.html')
 
-def register(request):
+@unauthenticated_user
+def registerUser(request):
+    form = RegisterForm()
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            # get data
+            username = form.cleaned_data.get("username")
+            email = form.cleaned_data.get("email")
+            first_name = form.cleaned_data.get("first_name")
+            last_name = form.cleaned_data.get("last_name")
+            mobile_phone = form.cleaned_data.get("mobile_phone")
+
+            # Check if email is taken
+            if User.objects.filter(email=email).count() != 0:
+                messages.error(request, "Email address has been taken")
+            else:
+                user = form.save()
+                messages.success(request, "Account was created for " + username)
+
+                # Create customer
+                Customer.objects.create(
+                    user=user,
+                    email=email,
+                    first_name=first_name,
+                    last_name=last_name,
+                    mobile_phone=mobile_phone
+                )
+
+
+                return redirect('login')
+
+    context = {'form':form}
+    return render(request, 'customer/register.html', context)
+
+def logoutUser(request):
+    logout(request)
+    messages.success(request, "Logout successful!")
+    return redirect('login')
+
+@login_required(login_url="login")
+def dashboard(request):
     context = {}
-    return render(request, 'customer/register.html')
+    return render(request, 'customer/dashboard.html')
+
 
 def shop(request):
     # Filter Items
@@ -107,6 +177,9 @@ def checkout(request):
             post_time_hour = str(request.POST.get('time'))[:2]
             post_time_minute = str(request.POST.get('time'))[-2:]
             order.recieve_time = f"{post_time_hour}:{post_time_minute}"
+            status = OrderStatus.objects.get(status="Order Sent")
+            print(status)
+            order.order_status = status
 
             order.save()
 
@@ -168,5 +241,7 @@ def update_item(request):
                 item.save()
                 
             messages.success(request, f"{item.name} was successfully removed from cart")
+    else:
+        messages.error(request, "Please register an account before logging in")
 
     return JsonResponse("Cart Updated.", safe=False)

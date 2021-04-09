@@ -1,60 +1,70 @@
 {% extends 'base.html' %} {% load static %} {% block topbar %}
 <h4>My Account</h4>
-{% endblock topbar %} {% block content %}
+{% endblock topbar %} {% block content %} 
+
+{% for field, error in form.errors.items %}
+    <div class="d-flex align-items-center alert alert-danger my-3 p-2 container" role="alert">
+        {{ error|escape }}
+    </div>
+{% endfor %}
 <main class="auth">
     <section class="auth-register">
         <form
-            action=""
             method="POST"
-            class="auth-register__form card-bg mt-3 d-flex justify-content-center align-items-start"
+            class="auth-register__form card-bg mt-3 mb-2 d-flex justify-content-center align-items-start"
         >
             {% csrf_token %}
+
             <div class="auth-register__content">
                 <h2 class="text-center mb-4">Register</h2>
                 <div class="auth-register__form-fields two-col-form">
                     <div class="form-field">
-                        <div class="label">
-                            <label for="text">First Name</label>
+                        <div class="label mb-2">
+                            <label for="phone">{{form.username.label}}</label>
                         </div>
-                        <input class="mt-2" type="text" />
+                        {{form.username}}
+                    </div>
+                    <div class="form-field">
+                        <div class="label mb-2">
+                            <label for="email">{{form.email.label}}</label>
+                        </div>
+                        {{form.email}}
+                    </div>
+                    <div class="form-field">
+                        <div class="label mb-2">{{form.first_name.label}}</div>
+                        {{form.first_name}}
                     </div>
 
                     <div class="form-field">
-                        <div class="label">
-                            <label for="text">Last Name</label>
+                        <div class="label mb-2">
+                            <label for="last">{{form.last_name.label}}</label>
                         </div>
-                        <input class="mt-2" type="text" />
+                        {{form.last_name}}
                     </div>
 
                     <div class="form-field">
-                        <div class="label">
-                            <label for="email">Password</label>
+                        <div class="label mb-2">
+                            <label for="pass1">{{form.password1.label}}</label>
                         </div>
-                        <input class="mt-2" type="password" />
+                        {{form.password1}}
                     </div>
 
                     <div class="form-field">
-                        <div class="label">
-                            <label for="email">Confirm Password</label>
+                        <div class="label mb-2">
+                            <label for="pass2">{{form.password2.label}}</label>
                         </div>
-                        <input class="mt-2" type="password" />
+                        {{form.password2}}
                     </div>
 
                     <div class="form-field">
-                        <div class="label">
-                            <label for="email">Email</label>
+                        <div class="label mb-2">
+                            <label for="phone"
+                                >{{form.mobile_phone.label}}</label
+                            >
                         </div>
-                        <input class="mt-2" type="text" />
-                    </div>
-
-                    <div class="form-field">
-                        <div class="label">
-                            <label for="text">Mobile Phone</label>
-                        </div>
-                        <input class="mt-2" type="text" />
+                        {{form.mobile_phone}}
                     </div>
                 </div>
-
                 <button
                     class="auth-register__submit bg-darkbrown text-white mx-auto d-block w-50"
                 >

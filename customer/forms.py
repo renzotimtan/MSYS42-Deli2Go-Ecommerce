@@ -1,6 +1,9 @@
 from django.forms import ModelForm, TextInput 
 from cashier.models import Address
 from django.core.exceptions import ValidationError
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class AddressForm(ModelForm):
     class Meta:
@@ -14,4 +17,13 @@ class AddressForm(ModelForm):
             'barangay':TextInput(attrs={"placeholder":"Barangay Valencia"}),
             'zip_code':TextInput(attrs={"placeholder":"1100"})
         }
-    
+
+class RegisterForm(UserCreationForm):
+    first_name = forms.CharField(max_length=80)
+    last_name = forms.CharField(max_length=80)
+    email = forms.EmailField(max_length=254)
+    mobile_phone = forms.RegexField(label="Mobile Phone (09xxxxxxxxx)", regex=r'^[0-9]{11}$', error_messages={'invalid': "Please enter a valid phone number format: 09xxxxxxxxx"})
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2','mobile_phone')

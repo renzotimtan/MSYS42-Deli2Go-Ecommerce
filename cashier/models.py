@@ -7,7 +7,7 @@ class Customer(models.Model):
     email = models.EmailField(max_length=100)
     first_name = models.CharField(max_length=80)
     last_name = models.CharField(max_length=80)
-    mobile_phone = models.CharField(max_length=10)
+    mobile_phone = models.CharField(max_length=11)
 
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -64,7 +64,7 @@ class Order(models.Model):
 
     # Foreign Keys
     payment_method = models.ForeignKey(PaymentMethod, on_delete=models.SET_NULL, null=True, blank=True)
-    order_status = models.ForeignKey(OrderStatus, on_delete=models.SET_NULL, null=True, default=OrderStatus.objects.get(id=1))
+    order_status = models.ForeignKey(OrderStatus, on_delete=models.SET_NULL, null=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
     # cashier = models.ForeignKey(Cashier, on_delete=models.SET_NULL, null=True, blank=True)
