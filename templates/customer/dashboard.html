@@ -28,7 +28,7 @@
             </div>
             <div class="dashboard__link d-flex flex-column mb-4">
                 <img src="{% static 'img/dashboard_address.png' %}" alt="">
-                <button class="bg-darkbrown text-white mt-4">My Addresses</button>
+                <a href="{% url 'addresses' %}"><button class="bg-darkbrown text-white mt-4">My Addresses</button></a>
             </div>
         </section>
         <section class="dashboard__footer d-flex justify-content-between">

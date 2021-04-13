@@ -14,4 +14,5 @@ urlpatterns = [
 
     # dashboard
     path('dashboard/', views.dashboard, name="dashboard"),
+    path('addresses/', views.addresses, name="addresses"),
 ]

@@ -16,11 +16,12 @@ from django.contrib import messages
 import json
 from django.http import JsonResponse
 
-#auth
+# auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .decorators import unauthenticated_user
+from django.contrib.auth.models import Group
 
 @unauthenticated_user
 def loginUser(request):
@@ -57,7 +58,7 @@ def registerUser(request):
                 messages.error(request, "Email address has been taken")
             else:
                 user = form.save()
-                messages.success(request, "Account was created for " + username)
+                messages.success(request, "Account was created for " + username + "! Please login to continue.")
 
                 # Create customer
                 Customer.objects.create(
@@ -67,6 +68,10 @@ def registerUser(request):
                     last_name=last_name,
                     mobile_phone=mobile_phone
                 )
+
+                # Add to group
+                group = Group.objects.get(name="Customer")
+                user.groups.add(group)
 
 
                 return redirect('login')
@@ -84,6 +89,13 @@ def dashboard(request):
     context = {}
     return render(request, 'customer/dashboard.html')
 
+@login_required(login_url="login")
+def addresses(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        addresses = customer.address_set.all()
+    context = {'addresses':addresses}
+    return render(request, 'customer/dashboard/addresses.html', context)
 
 def shop(request):
     # Filter Items

@@ -484,3 +484,12 @@ button {
         transform: translate(130vw);
     }
 }
+
+/* Address */
+.address {
+    line-height: 2;
+}
+
+.address__button {
+    padding: 8px 15px;
+}
