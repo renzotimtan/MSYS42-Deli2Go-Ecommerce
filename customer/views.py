@@ -23,6 +23,8 @@ from django.contrib.auth import authenticate, login, logout
 from .decorators import unauthenticated_user
 from django.contrib.auth.models import Group
 
+
+# -----------------------------------------------------------AUTHENTICATION-------------------------------------------------------------
 @unauthenticated_user
 def loginUser(request):
     if request.method == "POST":
@@ -84,6 +86,12 @@ def logoutUser(request):
     messages.success(request, "Logout successful!")
     return redirect('login')
 
+# ------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+# ----------------------------------------------------------------DASHBOARD------------------------------------------------------------------
 @login_required(login_url="login")
 def dashboard(request):
     context = {}
@@ -91,12 +99,80 @@ def dashboard(request):
 
 @login_required(login_url="login")
 def addresses(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        addresses = customer.address_set.all()
+    customer = request.user.customer
+    addresses = customer.address_set.all()
     context = {'addresses':addresses}
-    return render(request, 'customer/dashboard/addresses.html', context)
+    return render(request, 'customer/dashboard/addresses/addresses.html', context)
 
+@login_required(login_url="login")
+def add_address(request):
+    # Address form
+    customer = request.user.customer
+    form = AddressForm(initial={'customer': customer})
+    context = {'form': form}
+
+    if request.method == "POST":
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            # Validate if home_phone and zip_code are all numbers
+            home_phone = form.cleaned_data.get("home_phone")
+            zip_code = form.cleaned_data.get("zip_code")
+            if not home_phone.isnumeric():
+                messages.error(request, "Error - Phone Number is not valid")
+                context = {'form': form}
+            elif not zip_code.isnumeric():
+                messages.error(request, "Error - Zip Code is not valid")
+                context = {'form': form}
+               # If valid, save
+            else:
+                form.save()
+                messages.success(request, "Success - New Address has been created")
+                return redirect('addresses')
+
+    return render(request, 'customer/dashboard/addresses/add_address.html', context)
+
+@login_required(login_url="login")
+def edit_address(request, pk):
+    # Address form
+    address = Address.objects.get(pk=pk)
+    form = AddressForm(instance=address)
+
+    if request.method == "POST":
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            # Validate if home_phone and zip_code are all numbers
+            home_phone = form.cleaned_data.get("home_phone")
+            zip_code = form.cleaned_data.get("zip_code")
+            if not home_phone.isnumeric():
+                messages.error(request, "Error - Phone Number is not valid")
+                context = {'form': form}
+            elif not zip_code.isnumeric():
+                messages.error(request, "Error - Zip Code is not valid")
+                context = {'form': form}
+               # If valid, save
+            else:
+                form.save()
+                messages.success(request, "Success - Address has been updated")
+                return redirect('addresses')
+
+    context = {'form': form}
+    return render(request, 'customer/dashboard/addresses/edit_address.html', context)
+
+def delete_address(request):
+    data = json.loads(request.body)
+    address = Address.objects.get(id=data['address'])
+    address.delete()
+    messages.success(request, "Success - Address has been deleted")
+    
+    return JsonResponse("Address Deleted", safe=False)
+
+# -------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+# --------------------------------------------------------------------SHOP-----------------------------------------------------------------------
 def shop(request):
     # Filter Items
     items = Item.objects.all()
@@ -159,8 +235,22 @@ def checkout(request):
                 zip_code = form.cleaned_data.get("zip_code")
                 if not home_phone.isnumeric():
                     messages.error(request, "Error - Phone Number is not valid")
+                    context = {
+                        'order':order, 
+                        'order_items':order_items, 
+                        'addresses':addresses, 
+                        'payment_methods': payment_methods,
+                        'form':form,
+                    }    
                 elif not zip_code.isnumeric():
                     messages.error(request, "Error - Zip Code is not valid")
+                    context = {
+                        'order':order, 
+                        'order_items':order_items, 
+                        'addresses':addresses, 
+                        'payment_methods': payment_methods,
+                        'form':form,
+                    }    
 
                 # If valid, save
                 else:
@@ -250,7 +340,7 @@ def update_item(request):
                 ordered_item.delete()
             else:
                 ordered_item.save()
-                item.save()
+            item.save()
                 
             messages.success(request, f"{item.name} was successfully removed from cart")
     else:

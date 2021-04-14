@@ -1,0 +1,55 @@
+{% extends 'base.html' %} 
+
+{% block topbar %}
+<h4>Add Address</h4>
+{% endblock topbar %} 
+
+{% block topbar-button %}
+<a href="{% url 'addresses' %}"><button>Back to My Addresses</button></a>
+{% endblock topbar-button %} 
+
+{% block content %}
+<main class="add-address-page card-bg p-5 mb-5 w-50 mx-auto">
+    <h5 class="mb-4">Edit a Current Address</h5>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="add-address__content two-col-form my-1 mx-0">
+            <div class="form-field">
+                <div class="label">{{form.street_address.label}}:</div>
+                {{form.street_address}}
+            </div>
+
+            <div class="form-field">
+                <div class="label">{{form.barangay.label}}:</div>
+                {{form.barangay}}
+            </div>
+
+            <div class="form-field">
+                <div class="label">{{form.city.label}}:</div>
+                {{form.city}}
+            </div>
+
+            <div class="form-field">
+                <div class="label">{{form.zip_code.label}}:</div>
+                {{form.zip_code}}
+            </div>
+
+            <div class="form-field">
+                <div class="label">{{form.home_phone.label}}:</div>
+                {{form.home_phone}}
+            </div>
+
+            <div class="form-field">{{form.customer}}</div>
+
+            <div class="submit d-flex justify-content-end align-items-end">
+                <input
+                    class="add-items__submit bg-darkbrown text-white b-0 w-100 mt-1"
+                    type="submit"
+                    value="Submit"
+                />
+            </div>
+        </div>
+    </form>
+</main>
+
+{% endblock content %}

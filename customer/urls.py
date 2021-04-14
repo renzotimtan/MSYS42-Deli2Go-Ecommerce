@@ -15,4 +15,7 @@ urlpatterns = [
     # dashboard
     path('dashboard/', views.dashboard, name="dashboard"),
     path('addresses/', views.addresses, name="addresses"),
+    path('add_address/', views.add_address, name="add-address"),
+    path('edit_address/<str:pk>/', views.edit_address, name="edit-address"),
+    path('delete_address/', views.delete_address, name="delete-address"),
 ]

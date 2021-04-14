@@ -13,9 +13,9 @@ class AddressForm(ModelForm):
             'customer': TextInput(attrs={"readonly":"true", "class":"invisible"}),
             'street_address':TextInput(attrs={"placeholder":"Unit 54, Tower 3, 123 Sesame Street"}),
             'city':TextInput(attrs={"placeholder":"Quezon City"}),
-            'home_phone':TextInput(attrs={"placeholder":"8 digit landline (ex. 87241234)"}),
+            'home_phone':TextInput(attrs={"placeholder":"8 digit landline (ex. 87241234)", "minlength":8}),
             'barangay':TextInput(attrs={"placeholder":"Barangay Valencia"}),
-            'zip_code':TextInput(attrs={"placeholder":"1100"})
+            'zip_code':TextInput(attrs={"placeholder":"1100", "minlength":4})
         }
 
 class RegisterForm(UserCreationForm):
