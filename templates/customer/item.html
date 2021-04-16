@@ -11,6 +11,10 @@
 <main class="item container card-bg p-4 mb-2">
     {% if item.image %}
     <img class="w-100" src="{{ item.image.url }}" alt="" />
+    {% else %}
+    <div class="dummy-image bg-darkbrown d-flex justify-content-center align-items-center">
+        <h3 class="text-white">No Image Available</h3>
+    </div>
     {% endif %}
     <section class="item__infos d-flex flex-column justify-content-center">
         <h1>{{item.brand}} {{item.name}}</h1>
@@ -37,7 +41,11 @@
         <hr />
         <div class="item__info description">
             <div class="label">Description:</div>
-            {{ item.description }}
+            {% if item.description %}
+                {{ item.description }}
+            {% else %}
+                No description available.
+            {% endif %}
         </div>
         <div class="item__info mt-3">
             <span class="quantity me-4"

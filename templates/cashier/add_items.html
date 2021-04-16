@@ -5,13 +5,13 @@
 {% endblock topbar %} 
 
 {% block topbar-button %}
-<button>Back to Inventory</button>
+<a href="{% url 'edit-inventory' %}"><button>Back to Edit Inventory</button></a>
 {% endblock topbar-button %} 
 
 {% block content %}
 <main class="add-items container my-5">
   <h4>New Item</h4>
-  <div class="add-items__content mt-4">
+  <div class="add-items__content mt-4 card-bg p-4">
     <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="add-items__form-content two-col-form my-1 mx-0">

@@ -95,6 +95,10 @@ class Item(models.Model):
 
     # Foreign Keys
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+
+    @property
+    def get_shortened_desc(self):
+        return self.description[0:50]
     
     def __str__(self):
         return self.name

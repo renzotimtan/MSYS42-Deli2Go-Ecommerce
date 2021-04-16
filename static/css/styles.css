@@ -23,6 +23,23 @@ body {
     color: var(--darkbrown);
 }
 
+table {
+    width: 100%;
+}
+
+td,
+th,
+tr {
+    border: 1px solid var(--darkbrown);
+    padding: 15px 20px;
+}
+
+th {
+    background: var(--darkbrown);
+    color: white;
+}
+
+
 h1,
 h2,
 h3,
@@ -80,6 +97,7 @@ button {
     border: none;
     border-radius: 4px;
     color: #ffffff;
+    padding: 8px 15px;
 }
 
 .alert-error {
@@ -122,6 +140,10 @@ button {
 
 .flex-2 {
     flex: 2;
+}
+
+.w-35 {
+    width: 35%;
 }
 
 /* Navbar */
@@ -183,7 +205,7 @@ button {
 }
 
 .shop-items__item {
-    height: 220px;
+    height: 250px;
 }
 
 .shop-items__item img,
@@ -203,8 +225,8 @@ button {
     row-gap: 20px;
 }
 
-.filter-content > input,
-.filter-content > select {
+.filter-content input,
+.filter-content select {
     grid-column: 2/4;
     width: 100%;
     padding: 5px;
@@ -241,6 +263,11 @@ button {
     border: 2px solid #eeeeee;
 }
 
+.dummy-image {
+    height: 500px;
+    border: 2px solid #eeeeee;
+}
+
 .item .label {
     font-weight: 500;
 }
@@ -271,11 +298,6 @@ button {
 }
 
 /* Add Items */
-.add-items__content {
-    border: 1px solid var(--darkbrown);
-    padding: 2rem;
-}
-
 .two-col-form {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -457,7 +479,6 @@ button {
 }
 
 .dashboard button {
-    padding: 8px 15px;
     width: 100%;
 }
 .dashboard__footer img {
@@ -490,9 +511,6 @@ button {
     line-height: 2;
 }
 
-.address__button {
-    padding: 8px 15px;
-}
 
 .add-address-page {
     margin-top: 100px;
@@ -500,25 +518,27 @@ button {
 
 /* The Modal (background) */
 .modal {
-  display: none; /* Hidden by default */
-  position: absolute; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    display: none; /* Hidden by default */
+    position: absolute; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
 }
 
-
+.edit-inventory {
+    margin-bottom: 300px;
+}

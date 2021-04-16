@@ -1,10 +1,6 @@
-{% extends 'base.html' %} {% load static %} 
-
-{% block topbar %}
+{% extends 'base.html' %} {% load static %} {% block topbar %}
 <h4>Shop</h4>
-{% endblock topbar %} 
-
-{% block content %} 
+{% endblock topbar %} {% block content %}
 <main class="shop container mt-5">
     <aside class="shop-filter">
         <h4>Filter Items</h4>
@@ -44,9 +40,10 @@
                 />
                 {% else %}
                 <div
-                    class="temp-image bg-darkbrown"
-                    class="rounded-circle"
-                ></div>
+                    class="temp-image bg-darkbrown rounded-circle d-flex justify-content-center align-items-center"
+                >
+                    <h5 class="text-white text-center">No Image Available</h5>
+                </div>
                 {% endif %}
 
                 <h5 class="shop-items__item-title text-center mt-3">

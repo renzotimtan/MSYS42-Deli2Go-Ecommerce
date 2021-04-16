@@ -1,0 +1,79 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
+<h4>Edit Inventory</h4>
+{% endblock topbar %} 
+
+{% block topbar-button %}
+<a href="{% url 'cashier-dashboard' %}"><button>Back to Dashboard</button></a>
+{% endblock topbar-button %} 
+
+{% block content %}
+<main class="edit-inventory container mt-5">
+    <section class="edit_inventory__filter w-50">
+        <h4>Filter Items</h4>
+        <form method="get" class="filter-form mt-4">
+            <div class="filter-content">
+                <h6 class="filter-label align-self-center">Brand:</h6>
+                {{item_filter.form.brand}}
+                <h6 class="filter-label align-self-center">Name:</h6>
+                {{item_filter.form.name}}
+                <h6 class="filter-label align-self-center">Category:</h6>
+                {{item_filter.form.category}}
+                <h6 class="filter-label align-self-center">Price:</h6>
+                <span
+                    >PHP {{item_filter.form.min_price}} — PHP
+                    {{item_filter.form.max_price}}</span
+                >
+            </div>
+            <button
+                class="filter-submit bg-darkbrown b-0 mt-4 text-white w-100"
+                type="submit"
+            >
+                Search
+            </button>
+        </form>
+    </section>
+    <hr class="mt-5">
+    <section class="edit_inventory__items mt-5">
+        <header class="edit_inventory__items-header d-flex justify-content-between">
+            <h4>Products</h4>
+
+            <div class="edit_inventory__buttons">
+                <a href="{% url 'add-items' %}"><button class="bg-darkbrown">Add New Item</button></a>
+                <a href="{% url 'add-items' %}"><button class="bg-sienna ms-3">Adjust Quantity</button></a>
+            </div>
+        </header>
+        <table class="mt-4 text-center">
+            <thead>
+                <tr>
+                    <th>Brand</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Edit Item</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{item.brand}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.stock}}</td>
+                    {% if item.description %}
+                        <td class="text-left">{{item.get_shortened_desc}}...</td>
+                        {% else %}
+                        <td>No Description</td>
+                    {% endif %}
+                    <td>{{item.price}}</td>
+                    <td>{{item.category}}</td>
+                    <td><button class="bg-darkbrown">Edit</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+{% endblock content %}
