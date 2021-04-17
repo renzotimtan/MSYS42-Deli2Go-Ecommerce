@@ -54,16 +54,11 @@
         </div>
 
         <div class="submit d-flex justify-content-end align-items-end">
-          <input
-            class="add-items__submit bg-darkbrown text-white b-0 w-100 mt-1"
-            type="submit"
-            value="Submit"
-          />
+          <button class="add-items__submit bg-darkbrown text-white w-100 mt-1" type="submit">Add Item</button>
         </div>
       </div>
     </form>
   </div>
-  {{order}}
 </main>
 
 <script>
@@ -79,29 +74,5 @@
     reader.readAsDataURL(this.files[0]);
   };
 </script>
-
-<!-- {% if isDuplicate %}
-<script>
-  // modal error
-  const submit = document.querySelector(".add-items__submit");
-  const modal = document.querySelector(".error-modal");
-  const button = document.querySelector(".close");
-
-  submit.addEventListener('click', (e) => {
-    e.preventDefault()
-    modal.style.display = "block"
-  })
-
-  button.addEventListener('click', (e) => {
-    modal.style.display = "none"
-  })
-
-  window.addEventListener('click', (e) => {
-    if (e.target == modal) {
-      modal.style.display = "none";
-    } 
-  })
-</script>
-{% endif %} -->
 
 {% endblock content %}

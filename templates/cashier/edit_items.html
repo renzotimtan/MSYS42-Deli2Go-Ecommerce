@@ -1,0 +1,105 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
+<h4>Add Items</h4>
+{% endblock topbar %} 
+
+{% block topbar-button %}
+<a href="{% url 'edit-inventory' %}"><button>Back to Edit Inventory</button></a>
+{% endblock topbar-button %} 
+
+{% block content %}
+<main class="add-items container my-5">
+    <h4>New Item</h4>
+    <div class="add-items__content mt-4 card-bg p-4">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="add-items__form-content two-col-form my-1 mx-0">
+                <div class="form-field">
+                    <div class="label">{{form.image.label}}:</div>
+                    <div class="image-preview w-100 position-relative">
+                        <img
+                            id="image"
+                            class="position-absolute w-100 h-100"
+                            {% if item.image %}
+                            src="{{item.image.url}}"
+                            {% endif %}
+                        />
+
+                        {{form.image}}
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <div class="label">{{form.description.label}}:</div>
+                    {{form.description}}
+                </div>
+
+                <div class="form-field">
+                    <div class="label">{{form.brand.label}}:</div>
+                    {{form.brand}}
+                </div>
+
+                <div class="form-field">
+                    <div class="label">{{form.category.label}}:</div>
+                    {{form.category}}
+                </div>
+
+                <div class="form-field">
+                    <div class="label">{{form.name.label}}:</div>
+                    {{form.name}}
+                </div>
+
+                <div class="form-field">
+                    <div class="label">{{form.stock.label}}:</div>
+                    {{form.stock}}
+                </div>
+
+                <div class="form-field">
+                    <div class="label">{{form.price.label}}:</div>
+                    {{form.price}}
+                </div>
+
+                <div class="submit d-flex justify-content-end align-items-end">
+                    <button class="delete-item bg-sienna text-white b-0 w-100 mt-1 me-3">Delete</button>
+                    <button class="add-items__submit bg-darkbrown text-white w-100 mt-1" type="submit">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<div class="modal" >
+    <!-- Modal content -->
+    <div class="modal-content w-25">
+        <h5>Are you sure you want to delete {{item.name}}?</h5>
+        <div class="mt-3 d-flex">
+            <button
+                class="delete-item-yes address__button bg-darkbrown w-50 me-2"
+                data-product="{{item.id}}"
+            >
+                Yes
+            </button>
+            <button class="delete-item-no address__button bg-sienna w-50">
+                No
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // image upload
+    document.getElementById('files').onchange = function () {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            // get loaded data and render thumbnail.
+            document.getElementById('image').src = e.target.result;
+        };
+        // read the image file as a data URL.
+        reader.readAsDataURL(this.files[0]);
+    };
+</script>
+<script src="{% static 'js/delete_item.js' %}"></script>
+
+{% endblock content %}
