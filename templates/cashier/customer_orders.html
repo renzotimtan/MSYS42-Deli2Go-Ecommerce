@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
+<h4>View Orders</h4>
+{% endblock topbar %} 
+
+{% block topbar-button %}
+<a href="{% url 'cashier-dashboard' %}"><button>Back to Dashboard</button></a>
+{% endblock topbar-button %} 
+
+{% block content %}
+<main class="customer-orders mt-5 px-5">
+    
+    <section class="customer-orders__table">
+        <h4>Customer Orders</h4>
+        <table class="mt-3">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Order Date & Time</th>
+                    <th>Receive Date & Time</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Method</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Order</th>
+                    <th>Edit Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for order in orders %}
+                <tr>
+                    <td>{{order.id}}</td>
+                    <td>{{order.order_date}}</td>
+                    <td>{{order.receive_date}} <br> {{order.receive_time}}</th>
+                    <td>{{order.customer.name}}</td>
+                    <td>{{order.address}}</td>
+                    <td>{{order.payment_method}}</td>
+                    <td>&#8369; {{order.get_cart_total}}, <br> <strong>Delivery: &#8369; {{order.delivery_fee}}</strong></td>
+                    <td>{{order.order_status}}</td>
+                    <td><a href=""><button class="bg-darkbrown">View Order</button></a></td>
+                    <td><a href=""><button class="bg-sienna">Edit Status</button></a></td>
+                </tr> 
+                {% endfor %}
+                    
+                
+            </tbody>
+        </table>
+    </section>
+</main>
+{% endblock content %}

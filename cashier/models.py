@@ -9,6 +9,10 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=80)
     mobile_phone = models.CharField(max_length=11)
 
+    @property
+    def name(self):
+        return self.first_name + " " + self.last_name
+
     def __str__(self):
         return self.first_name + " " + self.last_name
 
@@ -55,7 +59,7 @@ class Order(models.Model):
 
     order_date = models.DateTimeField(auto_now_add=True)
     receive_date = models.DateField(null=True)
-    recieve_time = models.TimeField(null=True)
+    receive_time = models.TimeField(null=True)
     proof_of_payment = models.ImageField(null=True, blank=True)
     delivery_fee = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
 

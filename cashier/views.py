@@ -17,6 +17,8 @@ from django.http import JsonResponse
 def dashboard(request):
     return render(request, 'cashier/dashboard.html')
 
+
+# EDIT INVENTORY
 def edit_inventory(request):
     # Filter Items
     items = Item.objects.all().order_by('-brand')
@@ -108,3 +110,9 @@ def delete_items(request):
     messages.success(request, f"{item.name} has been deleted")
     
     return JsonResponse("Item Deleted", safe=False)
+
+# VIEW CUSTOMER ORDERS
+def customer_orders(request):
+    orders = Order.objects.filter(complete=True).order_by("receive_date")
+    context = {'orders':orders}
+    return render(request, 'cashier/customer_orders.html', context)

@@ -278,7 +278,7 @@ def checkout(request):
 
             post_time_hour = str(request.POST.get('time'))[:2]
             post_time_minute = str(request.POST.get('time'))[-2:]
-            order.recieve_time = f"{post_time_hour}:{post_time_minute}"
+            order.receive_time = f"{post_time_hour}:{post_time_minute}"
             status = OrderStatus.objects.get(status="Order Sent")
             print(status)
             order.order_status = status
