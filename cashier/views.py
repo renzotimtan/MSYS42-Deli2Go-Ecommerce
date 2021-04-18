@@ -4,6 +4,9 @@ from .models import Item
 from django.db.models import Q
 from django.contrib import messages
 
+# Paginator
+from django.core.paginator import Paginator
+
 # filters
 from customer.filters import ItemFilter
 
@@ -16,14 +19,26 @@ def dashboard(request):
 
 def edit_inventory(request):
     # Filter Items
-    items = Item.objects.all()
+    items = Item.objects.all().order_by('-brand')
 
     item_filter = ItemFilter(request.GET, queryset=items)
     items = item_filter.qs
 
+    # Pagination
+    paginator = Paginator(items, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # URL copy
+    get_copy = request.GET.copy()
+    if get_copy.get('page'):
+        get_copy.pop('page')
+
     context = {
         'items':items,
-        'item_filter':item_filter
+        'item_filter':item_filter,
+        'items_list': page_obj,
+        'get_copy': get_copy
     }
     return render(request, 'cashier/edit_inventory.html', context)
 
@@ -90,6 +105,6 @@ def delete_items(request):
     data = json.loads(request.body)
     item = Item.objects.get(id=data['item'])
     item.delete()
-    messages.success(request, "Item has been deleted")
+    messages.success(request, f"{item.name} has been deleted")
     
     return JsonResponse("Item Deleted", safe=False)
