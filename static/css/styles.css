@@ -413,6 +413,14 @@ button {
     width: 30%;
 }
 
+.add-address__submit {
+    grid-column: 1/3;
+}
+
+.add-address__submit button {
+    padding: 10px 15px;
+}
+
 .add-address__content input,
 .add-address__content select {
     width: 100%;
@@ -538,6 +546,7 @@ button {
 
 /* Modal Content/Box */
 .modal-content {
+    position: relative;
     background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
@@ -545,6 +554,36 @@ button {
     width: 80%; /* Could be more or less, depending on screen size */
 }
 
+/* The Close Button */
+.close {
+  position: absolute;
+  top: 3px;
+  right: 10px;
+  color: var(--darkbrown);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Edit Inventory */
 .edit-inventory {
     margin-bottom: 300px;
+}
+
+/* Customer Orders */
+.customer-order__filter input, 
+.customer-order__filter select {
+    margin-right: 10px;
+    padding: 4px 8px;
+}  
+
+.customer-order__filter label {
+    margin-right: 7px;
 }

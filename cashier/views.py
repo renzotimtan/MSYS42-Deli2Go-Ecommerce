@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import *
-from .models import Item
+from .models import *
 from django.db.models import Q
 from django.contrib import messages
 
@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 
 # filters
 from customer.filters import ItemFilter
+from .filters import OrderFilter
 
 # json
 import json
@@ -22,14 +23,13 @@ def dashboard(request):
 def edit_inventory(request):
     # Filter Items
     items = Item.objects.all().order_by('-brand')
-
     item_filter = ItemFilter(request.GET, queryset=items)
     items = item_filter.qs
 
     # Pagination
-    paginator = Paginator(items, 2)
+    paginator = Paginator(items, 10)
     page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    items_list = paginator.get_page(page_number)
 
     # URL copy
     get_copy = request.GET.copy()
@@ -37,12 +37,39 @@ def edit_inventory(request):
         get_copy.pop('page')
 
     context = {
-        'items':items,
         'item_filter':item_filter,
-        'items_list': page_obj,
+        'items_list': items_list,
         'get_copy': get_copy
     }
     return render(request, 'cashier/edit_inventory.html', context)
+
+# VIEW CUSTOMER ORDERS
+def customer_orders(request):
+    # Filter Orders
+    orders = Order.objects.filter(complete=True).order_by("receive_date")
+    order_filter = OrderFilter(request.GET, queryset=orders)
+    orders = order_filter.qs
+
+    # Pagination
+    paginator = Paginator(orders, 2)
+    page_number = request.GET.get('page')
+    orders_list = paginator.get_page(page_number)
+
+     # URL copy
+    get_copy = request.GET.copy()
+    if get_copy.get('page'):
+        get_copy.pop('page')
+
+    # Get ordered-items
+    ordered_items = OrderedItem.objects.all() 
+
+    context = {
+        'order_filter': order_filter,
+        'orders_list': orders_list,
+        'get_copy': get_copy,
+        'ordered_items': ordered_items
+    }
+    return render(request, 'cashier/customer_orders.html', context)
 
 def add_items(request):
     form = ItemForm()
@@ -111,8 +138,3 @@ def delete_items(request):
     
     return JsonResponse("Item Deleted", safe=False)
 
-# VIEW CUSTOMER ORDERS
-def customer_orders(request):
-    orders = Order.objects.filter(complete=True).order_by("receive_date")
-    context = {'orders':orders}
-    return render(request, 'cashier/customer_orders.html', context)

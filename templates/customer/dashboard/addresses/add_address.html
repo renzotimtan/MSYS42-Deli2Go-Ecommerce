@@ -1,14 +1,8 @@
-{% extends 'base.html' %} 
-
-{% block topbar %}
+{% extends 'base.html' %} {% block topbar %}
 <h4>Add Address</h4>
-{% endblock topbar %} 
-
-{% block topbar-button %}
+{% endblock topbar %} {% block topbar-button %}
 <a href="{% url 'addresses' %}"><button>Back to My Addresses</button></a>
-{% endblock topbar-button %} 
-
-{% block content %}
+{% endblock topbar-button %} {% block content %}
 <main class="add-address-page card-bg p-5 mb-5 w-50 mx-auto">
     <h5 class="mb-4">Add a New Address</h5>
     <form method="POST">
@@ -41,12 +35,13 @@
 
             <div class="form-field">{{form.customer}}</div>
 
-            <div class="submit d-flex justify-content-end align-items-end">
-                <input
-                    class="add-items__submit bg-darkbrown text-white b-0 w-100 mt-1"
+            <div
+                class="add-address__submit submit d-flex justify-content-end align-items-end"
+            >
+                <button
+                    class="bg-darkbrown text-white w-100 mt-1"
                     type="submit"
-                    value="Submit"
-                />
+                >Submit</button>
             </div>
         </div>
     </form>
