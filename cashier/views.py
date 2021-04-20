@@ -43,34 +43,6 @@ def edit_inventory(request):
     }
     return render(request, 'cashier/edit_inventory.html', context)
 
-# VIEW CUSTOMER ORDERS
-def customer_orders(request):
-    # Filter Orders
-    orders = Order.objects.filter(complete=True).order_by("receive_date")
-    order_filter = OrderFilter(request.GET, queryset=orders)
-    orders = order_filter.qs
-
-    # Pagination
-    paginator = Paginator(orders, 2)
-    page_number = request.GET.get('page')
-    orders_list = paginator.get_page(page_number)
-
-     # URL copy
-    get_copy = request.GET.copy()
-    if get_copy.get('page'):
-        get_copy.pop('page')
-
-    # Get ordered-items
-    ordered_items = OrderedItem.objects.all() 
-
-    context = {
-        'order_filter': order_filter,
-        'orders_list': orders_list,
-        'get_copy': get_copy,
-        'ordered_items': ordered_items
-    }
-    return render(request, 'cashier/customer_orders.html', context)
-
 def add_items(request):
     form = ItemForm()
 
@@ -138,3 +110,47 @@ def delete_items(request):
     
     return JsonResponse("Item Deleted", safe=False)
 
+# VIEW CUSTOMER ORDERS
+def customer_orders(request):
+    # Filter Orders
+    orders = Order.objects.filter(complete=True).order_by("receive_date")
+    order_filter = OrderFilter(request.GET, queryset=orders)
+    orders = order_filter.qs
+
+    # Pagination
+    paginator = Paginator(orders, 10)
+    page_number = request.GET.get('page')
+    orders_list = paginator.get_page(page_number)
+
+     # URL copy
+    get_copy = request.GET.copy()
+    if get_copy.get('page'):
+        get_copy.pop('page')
+
+    # Get ordered-items
+    ordered_items = OrderedItem.objects.all() 
+
+    # Get Categories
+    status_list = OrderStatus.objects.all()
+
+    context = {
+        'order_filter': order_filter,
+        'orders_list': orders_list,
+        'get_copy': get_copy,
+        'ordered_items': ordered_items,
+        'status_list':status_list
+    }
+    return render(request, 'cashier/customer_orders.html', context)
+    
+def change_status(request):
+    data = json.loads(request.body)
+    status = data['status']
+    orderId = data['order']
+    
+    order = Order.objects.get(id=orderId)
+    status = OrderStatus.objects.get(status=status)
+
+    order.order_status = status
+    order.save()
+
+    return JsonResponse("Status Changes", safe=False)
