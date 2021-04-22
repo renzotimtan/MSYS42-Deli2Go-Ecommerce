@@ -24,7 +24,7 @@
             </div>
             <div class="dashboard__link d-flex flex-column mb-4">
                 <img src="{% static 'img/dashboard_status.png' %}" alt="">
-                <button class="bg-darkbrown text-white mt-4">Order Status</button>
+                <a href="{% url 'order-status' %}"><button class="bg-darkbrown text-white mt-4">Order Status</button></a>
             </div>
             <div class="dashboard__link d-flex flex-column mb-4">
                 <img src="{% static 'img/dashboard_address.png' %}" alt="">

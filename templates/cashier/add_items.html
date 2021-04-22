@@ -15,11 +15,13 @@
     <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="add-items__form-content two-col-form my-1 mx-0">
+          
         <div class="form-field">
           <div class="label">{{form.image.label}}:</div>
           <div class="image-preview w-100 position-relative">
             <img id="image" class="position-absolute w-100 h-100" />
             {{form.image}}
+            <button class="remove-image bg-sienna cursor-pointer position-absolute">Remove Image</button>
           </div>
         </div>
 
@@ -61,18 +63,6 @@
   </div>
 </main>
 
-<script>
-  // image upload
-  document.getElementById('files').onchange = function () {
-    var reader = new FileReader();
-
-    reader.onload = function (e) {
-      // get loaded data and render thumbnail.
-      document.getElementById('image').src = e.target.result;
-    };
-    // read the image file as a data URL.
-    reader.readAsDataURL(this.files[0]);
-  };
-</script>
+<script src="{% static 'js/imageLogic.js' %}"></script>
 
 {% endblock content %}

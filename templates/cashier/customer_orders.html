@@ -9,7 +9,7 @@
 {% endblock topbar-button %} 
 
 {% block content %}
-<main class="customer-orders my-5 px-5">
+<main class="customer-orders my-5 w-90 mx-auto">
     <section class="customer-order__filter">
         <form action="" method="GET">
             <h4 class="mb-4">Filter Orders</h4>
@@ -20,7 +20,7 @@
     <hr class="my-4">
     <section class="customer-orders__table">
         <h4>Customer Orders</h4>
-        <table class="mt-4">
+        <table class="mt-4 text-center">
             <thead>
                 <tr>
                     <th>Order ID</th>
@@ -29,7 +29,6 @@
                     <th>Name</th>
                     <th>Address</th>
                     <th>Method</th>
-                    <th>Amount</th>
                     <th>Status</th>
                     <th>Order</th>
                     <th>Edit Status</th>
@@ -42,14 +41,15 @@
                     <td>{{order.id}}</td>
                     <td>{{order.order_date}}</td>
                     <td>{{order.receive_date}} <br> {{order.receive_time}}</th>
-                    <td>{{order.customer.name}}</td>
-                    <td>{{order.address}}</td>
+                    <td>{{order.customer.name}} <strong>{{order.customer.mobile_phone}}</strong></td>
+                    <td>{{order.address}}. <br> <strong>Landline: {{order.address.home_phone}}</strong></td>
                     <td>{{order.payment_method}}</td>
-                    <td>&#8369; {{order.get_cart_total}}, <br> <strong>Delivery: &#8369; {{order.delivery_fee}}</strong></td>
                     <td>{{order.order_status}}</td>
-                    <td><a href=""><button class="view-order bg-darkbrown" data-product={{order.id}}>View Order</button></a></td>
-                    <td><a href=""><button class="edit-status bg-sienna" data-product={{order.id}}>Edit Status</button></a></td>
+                    <td class="wide-column"><a href=""><button class="view-order bg-darkbrown" data-product={{order.id}}>View Order</button></a></td>
+                    <td class="wide-column"><a href=""><button class="edit-status bg-sienna" data-product={{order.id}}>Edit Status</button></a></td>
                 </tr> 
+
+                <!-- View Order Logic -->
                 <div class="modal modal-{{order.id}}-items">
                     <!-- Modal content -->
                     <div class="modal-content w-25">
@@ -58,11 +58,20 @@
                         <hr class="mt-3">
                         {% for ordered_item in ordered_items %}
                             {% if ordered_item.order.id == order.id %}
-                                <p class="mb-1">x{{ordered_item.quantity}} - <strong>{{ordered_item.item.name}}</strong></p>
+                                <p class="d-flex justify-content-between align-items-center">
+                                    <span><strong>{{ordered_item.item.name}}</strong> - x{{ordered_item.quantity}}</span>
+                                    <span class="ms-3"> &#8369; {{ordered_item.get_total}} </span>
+                                </p>
                             {% endif %}
-                        {% endfor %}    
+                        {% endfor %} 
+                        <hr>
+                        <p class="d-flex justify-content-between align-items-center"><strong>Delivery Fee:</strong>&#8369; {{order.delivery_fee}}</p>
+                        <hr>
+                        <p class="d-flex justify-content-between align-items-center"><strong>Total Amount:</strong>&#8369; {{order.get_overall_total}}</p>
                     </div>
                 </div>
+
+                <!-- Change Order Status -->
                 <div class="modal modal-{{order.id}}-status">
                     <!-- Modal content -->
                     <div class="modal-content w-25">
@@ -135,71 +144,5 @@
         {% endif %}
     </section>
 </main>
-<script>
-    const viewButton = document.querySelectorAll('.view-order');
-    const editStatus = document.querySelectorAll('.edit-status')
-    const modals = document.querySelectorAll('.modal');
-    const closeButtons = document.querySelectorAll('.close');
-
-
-    for (let button of viewButton) {
-        button.addEventListener('click', (e) => {
-            e.preventDefault()
-            let order = e.target.dataset.product;
-            const currentModal = document.querySelector('.modal-' + order + '-items')
-            currentModal.style.display = "block";
-        })
-    }
-
-    for (let button of editStatus) {
-        button.addEventListener('click', (e) => {
-            e.preventDefault()
-            let order = e.target.dataset.product;
-            const currentModal = document.querySelector('.modal-' + order + '-status')
-            currentModal.style.display = "block";
-        })
-    }
-
-        // When the user clicks anywhere outside of the modal, close it
-    window.addEventListener('click', (e) => {
-        for (let modal of modals) {
-            if (e.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
-    });
-
-    for (let button of closeButtons) {
-        button.addEventListener('click', (e) => {
-            button.parentElement.parentElement.style.display = "none"
-        });
-    }
-
-    // Status save
-
-    const statusSaveButtons = document.querySelectorAll(".status-save");
-
-    for (let button of statusSaveButtons) {
-        button.addEventListener('click', (e) => {
-            e.preventDefault()
-            let order = e.target.dataset.product;
-            const currentModal = document.querySelector(".modal-" + order + "-status .status-change")
-            const selectedValue = currentModal.value
-            
-            fetch('/cashier/change-status/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken,
-                },
-                body: JSON.stringify({ order, status:selectedValue }),
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    location.reload()
-                });
-                })
-            }
-    
-</script>
+<script src="{% static 'js/customer_orders.js' %}"></script>
 {% endblock content %}

@@ -7,7 +7,7 @@ from cashier.models import *
 from .filters import ItemFilter
 
 # forms
-from .forms import AddressForm, RegisterForm
+from .forms import AddressForm, RegisterForm, ImageUploadForm
 
 # messages
 from django.contrib import messages
@@ -165,6 +165,29 @@ def delete_address(request):
     messages.success(request, "Success - Address has been deleted")
     
     return JsonResponse("Address Deleted", safe=False)
+
+
+def order_status(request):
+    orders = Order.objects.filter(customer=request.user.customer, complete=True).order_by("receive_date")
+    # Get ordered-items
+    ordered_items = OrderedItem.objects.all() 
+    context = {
+            "orders":orders,
+            "ordered_items":ordered_items
+        }
+    return render(request, 'customer/dashboard/orders/order_status.html', context)
+
+def upload_proof(request, pk):
+    order = Order.objects.get(id=pk)
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            order = Order.objects.get(id=pk)
+            order.proof_of_payment = form.cleaned_data['image']
+            order.save()
+            messages.success(request, "Proof of Payment has been successfully uploaded")
+    context = {'order':order}
+    return render(request, 'customer/dashboard/orders/upload_proof.html', context)
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -79,6 +79,7 @@ a:hover {
     color: inherit !important;
 }
 
+
 input:active,
 input:focus,
 button:active,
@@ -101,6 +102,14 @@ button {
     border-radius: 4px;
     color: #ffffff;
     padding: 8px 15px;
+}
+
+.b-1 {
+    border: 1px solid var(--darkbrown);
+}
+
+.wide-column {
+    width: 160px;
 }
 
 .alert-error {
@@ -149,6 +158,13 @@ button {
     width: 35%;
 }
 
+.w-80 {
+    width: 80%;
+}
+
+.w-90 {
+    width: 90%;
+}
 /* Pagination */
 .page-item.active .page-link {
     background: var(--darkbrown) !important;
@@ -586,4 +602,11 @@ button {
 
 .customer-order__filter label {
     margin-right: 7px;
+}
+
+/* ImageField */
+.remove-image {
+    z-index: 10;
+    top: 0;
+    right: 0;
 }

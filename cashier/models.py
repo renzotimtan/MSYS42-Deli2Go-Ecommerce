@@ -80,6 +80,13 @@ class Order(models.Model):
         total = sum([item.get_total for item in ordered_items])
         return total
 
+    @property
+    def get_overall_total(self):
+        ordered_items = self.ordereditem_set.all()
+        total = sum([item.get_total for item in ordered_items]) + self.delivery_fee
+        return total
+
+
     def __str__(self):
         return str(self.pk)
 
