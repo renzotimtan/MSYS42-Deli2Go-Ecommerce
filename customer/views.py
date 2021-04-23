@@ -20,9 +20,8 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import Group
-
 
 # -----------------------------------------------------------AUTHENTICATION-------------------------------------------------------------
 @unauthenticated_user
@@ -94,10 +93,17 @@ def logoutUser(request):
 # ----------------------------------------------------------------DASHBOARD------------------------------------------------------------------
 @login_required(login_url="login")
 def dashboard(request):
-    context = {}
+    group = None
+    if request.user.groups.exists():
+        group = request.user.groups.all()[0].name
+
+    if group == "Cashier":
+        return render(request, 'cashier/dashboard.html')
+
     return render(request, 'customer/dashboard.html')
 
 @login_required(login_url="login")
+@allowed_users(allowed_roles=['Customer'])
 def addresses(request):
     customer = request.user.customer
     addresses = customer.address_set.all()
@@ -105,6 +111,7 @@ def addresses(request):
     return render(request, 'customer/dashboard/addresses/addresses.html', context)
 
 @login_required(login_url="login")
+@allowed_users(allowed_roles=['Customer'])
 def add_address(request):
     # Address form
     customer = request.user.customer
@@ -132,6 +139,7 @@ def add_address(request):
     return render(request, 'customer/dashboard/addresses/add_address.html', context)
 
 @login_required(login_url="login")
+@allowed_users(allowed_roles=['Customer'])
 def edit_address(request, pk):
     # Address form
     address = Address.objects.get(pk=pk)
@@ -166,7 +174,8 @@ def delete_address(request):
     
     return JsonResponse("Address Deleted", safe=False)
 
-
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Customer'])
 def order_status(request):
     orders = Order.objects.filter(customer=request.user.customer, complete=True).order_by("receive_date")
     # Get ordered-items
@@ -177,6 +186,8 @@ def order_status(request):
         }
     return render(request, 'customer/dashboard/orders/order_status.html', context)
 
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Customer'])
 def upload_proof(request, pk):
     order = Order.objects.get(id=pk)
     if request.method == 'POST':

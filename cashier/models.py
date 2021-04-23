@@ -98,7 +98,7 @@ class Category(models.Model):
 
 class Item(models.Model):
     image = models.ImageField(null=True, blank=True)
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=40)
     description = models.TextField(max_length=500, blank=True)
     brand = models.CharField(max_length=50)
     stock = models.PositiveIntegerField()

@@ -48,17 +48,21 @@
             {% endif %}
         </div>
         <div class="item__info mt-3">
+            {% if user.groups.all.0.name == "Customer" %}
             <span class="quantity me-4"
                 ><span class="label">Quantity: </span>
                 <input class="addtocart-quantity" type="number" min="0" />
             </span>
+            {% endif %}
             <span class="available-stock"
                 ><span class="label">Available Stock: </span>{{ item.stock }}</span
             >
         </div>
+        {% if user.groups.all.0.name == "Customer" %}
         <div class="button">
             <button class="addtocart bg-darkbrown mt-4" data-product={{item.id}}>Add To Cart</button>
         </div>
+        {% endif %}'
     </section>
 </main>
 

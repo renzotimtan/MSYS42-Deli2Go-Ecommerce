@@ -5,7 +5,7 @@
 {% endblock topbar %} 
 
 {% block topbar-button %}
-<a href="{% url 'cashier-dashboard' %}"><button>Back to Dashboard</button></a>
+<a href="{% url 'dashboard' %}"><button>Back to Dashboard</button></a>
 {% endblock topbar-button %} 
 
 {% block content %}
@@ -34,88 +34,102 @@
             </button>
         </form>
     </section>
-    <hr class="mt-5">
+    <hr class="mt-5" />
     <section class="edit_inventory__items mt-5">
-        <header class="edit_inventory__items-header d-flex justify-content-between">
+        <header
+            class="edit_inventory__items-header d-flex justify-content-between"
+        >
             <h4>Products</h4>
 
             <div class="edit_inventory__buttons">
-                <a href="{% url 'add-items' %}"><button class="bg-darkbrown">Add New Item</button></a>
-                <a href="{% url 'add-items' %}"><button class="bg-sienna ms-3">Adjust Quantity</button></a>
+                <a href="{% url 'add-items' %}"
+                    ><button class="bg-darkbrown">Add New Item</button></a
+                >
+                <a href="{% url 'add-items' %}"
+                    ><button class="bg-sienna ms-3">Adjust Quantity</button></a
+                >
             </div>
         </header>
-        <table class="mt-4 text-center">
-            <thead>
-                <tr>
-                    <th>Brand</th>
-                    <th>Name</th>
-                    <th>Quantity</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Category</th>
-                    <th>Edit Item</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items_list %}
-                <tr>
-                    <td>{{item.brand}}</td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.stock}}</td>
-                    {% if item.description %}
-                        <td class="text-left">{{item.get_shortened_desc}}...</td>
-                        {% else %}
-                        <td>No Description</td>
-                    {% endif %}
-                    <td>{{item.price}}</td>
-                    <td>{{item.category}}</td>
-                    <td><a href="{% url 'edit-items' item.id %}"><button class="bg-darkbrown">Edit</button></a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+        <section class="cart-list p-4 card-bg text-center mt-4">
+            <div class="cart-row d-flex mb-4">
+                <div class="flex-1"><p class="weight-600">Brand</p></div>
+                <div class="flex-1"><p class="weight-600">Name</p></div>
+                <div class="flex-1"><p class="weight-600">Quantity</p></div>
+                <div class="flex-2"><p class="weight-600">Description</p></div>
+                <div class="flex-1"><p class="weight-600">Price</p></div>
+                <div class="flex-1"><p class="weight-600">Category</p></div>
+                <div class="flex-1"><p class="weight-600">Edit Item</p></div>
+            </div>
+
+            {% for item in items_list %}
+            <div class="cart-row mb-4 d-flex">
+                <div class="flex-1"><p>{{item.brand}}</p></div>
+                <div class="flex-1"><p>{{item.name}}</p></div>
+                <div class="flex-1"><p>{{item.stock}}</p></div>
+                {% if item.description %}
+                <div class="flex-2"><p>{{item.get_shortened_desc}}...</p></div>
+                {% else %}
+                <div class="flex-2"><p>No Description</p></div>
+                {% endif %}
+                <div class="flex-1"><p>{{item.price}}</p></div>
+                <div class="flex-1"><p>{{item.category}}</p></div>
+                <div class="flex-1">
+                    <a href="{% url 'edit-items' item.id %}"
+                        ><button class="bg-darkbrown">Edit</button></a
+                    >
+                </div>
+            </div>
+            {% endfor %}
+        </section>
     </section>
     <section class="pagination-section mt-5 text-center">
         {% if items_list.has_other_pages %}
         <ul class="pagination justify-content-end">
-
-          <!-- PREVIOUS -->
-          {% if items_list.has_previous %}
-          <li class="page-item">
-            <a href="?{{ get_copy.urlencode }}&page={{items_list.previous_page_number}}" class="page-link">&laquo;</a>
-          </li>
-          {% else %}
-            <li class="page-item disabled">
-              <a class="page-link">&laquo;</a>
+            <!-- PREVIOUS -->
+            {% if items_list.has_previous %}
+            <li class="page-item">
+                <a
+                    href="?{{ get_copy.urlencode }}&page={{items_list.previous_page_number}}"
+                    class="page-link"
+                    >&laquo;</a
+                >
             </li>
-          {% endif %}
-          
-          <!-- NUMBERS -->
-          {% for i in items_list.paginator.page_range %}
-            {% if items_list.number == i %}
-              <li class="page-item active">
-                <a class="page-link">{{i}}</a>
-              </li>
             {% else %}
-              <li class="page-item">
-                <a href="?{{ get_copy.urlencode }}&page={{i}}" class="page-link">{{i}}</a>
-              </li>
-            {% endif %}
-          {% endfor %}
-
-          <!-- NEXT -->
-          {% if items_list.has_next %}
-          <li class="page-item">
-              
-            <a href="?{{ get_copy.urlencode }}&page={{items_list.next_page_number}}" class="page-link">&raquo;</a>
-          </li>
-          {% else %}
             <li class="page-item disabled">
-              <a class="page-link">&raquo;</a>
+                <a class="page-link">&laquo;</a>
             </li>
-          {% endif %}
+            {% endif %}
 
-            
+            <!-- NUMBERS -->
+            {% for i in items_list.paginator.page_range %} 
+            {% if items_list.number == i %}
+            <li class="page-item active">
+                <a class="page-link">{{i}}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a href="?{{ get_copy.urlencode }}&page={{i}}" class="page-link"
+                    >{{i}}</a
+                >
+            </li>
+            {% endif %} 
+            {% endfor %}
+
+            <!-- NEXT -->
+            {% if items_list.has_next %}
+            <li class="page-item">
+                <a
+                    href="?{{ get_copy.urlencode }}&page={{items_list.next_page_number}}"
+                    class="page-link"
+                    >&raquo;</a
+                >
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link">&raquo;</a>
+            </li>
+            {% endif %}
         </ul>
         {% endif %}
     </section>

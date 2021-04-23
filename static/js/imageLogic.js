@@ -1,7 +1,6 @@
 const files = document.getElementById('files');
 const removeImage = document.querySelector('.remove-image');
 
-console.log(removeImage);
 // image upload
 files.onchange = function () {
     var reader = new FileReader();

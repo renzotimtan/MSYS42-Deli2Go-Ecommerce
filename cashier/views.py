@@ -3,6 +3,8 @@ from .forms import *
 from .models import *
 from django.db.models import Q
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from customer.decorators import unauthenticated_user, allowed_users
 
 # Paginator
 from django.core.paginator import Paginator
@@ -15,11 +17,10 @@ from .filters import OrderFilter
 import json
 from django.http import JsonResponse
 
-def dashboard(request):
-    return render(request, 'cashier/dashboard.html')
-
 
 # EDIT INVENTORY
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Cashier'])
 def edit_inventory(request):
     # Filter Items
     items = Item.objects.all().order_by('-brand')
@@ -43,6 +44,8 @@ def edit_inventory(request):
     }
     return render(request, 'cashier/edit_inventory.html', context)
 
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Cashier'])
 def add_items(request):
     form = ItemForm()
 
@@ -69,6 +72,8 @@ def add_items(request):
 
     return render(request, 'cashier/add_items.html', context)
 
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Cashier'])
 def edit_items(request, pk):
     item = Item.objects.get(id=pk)
     form = ItemForm(instance=item)
@@ -111,6 +116,8 @@ def delete_items(request):
     return JsonResponse("Item Deleted", safe=False)
 
 # VIEW CUSTOMER ORDERS
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Cashier'])
 def customer_orders(request):
     # Filter Orders
     orders = Order.objects.filter(complete=True).order_by("receive_date")

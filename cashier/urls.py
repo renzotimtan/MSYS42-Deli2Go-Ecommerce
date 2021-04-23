@@ -8,7 +8,6 @@ urlpatterns = [
     path('delete-items/', views.delete_items, name="delete-items"),
 
     # Dashboard
-    path('dashboard/', views.dashboard, name="cashier-dashboard"),
     path('edit-inventory/', views.edit_inventory, name="edit-inventory"),
     path('customer-orders/', views.customer_orders, name="customer-orders"),
     path('change-status/', views.change_status, name="change-status")

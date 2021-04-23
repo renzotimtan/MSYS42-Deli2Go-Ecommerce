@@ -5,62 +5,91 @@
 {% endblock topbar %} 
 
 {% block content %}
-<main class="order-status my-5 w-80 mx-auto">
-    <table class="text-center">
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Order Date</th>
-                <th>Receive Date & Time</th>
-                <th>Address</th>
-                <th>Method</th>
-                <th>Status</th>
-                <th>Order</th>
-                <th>Proof of Payment</th>
-            </tr>
-        </thead>
-        <tbody>
-            
-            {% for order in orders %}
-                <tr>
-                    <td>{{order.id}}</td>
-                    <td>{{order.order_date}}</td>
-                    <td>{{order.receive_date}} <br> {{order.receive_time}}</th>
-                    <td>{{order.address}}. <br> <strong>Landline: {{order.address.home_phone}}</strong></td>
-                    <td>{{order.payment_method}}</td>
-                    <td>{{order.order_status}}</td>
-                    <td class="wide-column"><button class="view-order bg-darkbrown" data-product={{order.id}}>View Order</button></td>      
-                    {% if order.payment_method.method == "GCash Delivery" %}
-                    <td class="wide-column"><a href="{% url 'upload-proof' order.id %}"><button class="bg-sienna">Add Image</button></a></td>      
-                    {% else %}
-                    <td>Not Applicable</td>
-                    {% endif %}
-                </tr>
-                <!-- View Order Logic -->
-                <div class="modal modal-{{order.id}}-items">
-                    <!-- Modal content -->
-                    <div class="modal-content w-25">
-                        <span class="close">&times;</span>
-                        <h5>All Ordered Items</h5>
-                        <hr class="mt-3">
-                        {% for ordered_item in ordered_items %}
-                            {% if ordered_item.order.id == order.id %}
-                                <p class="d-flex justify-content-between align-items-center">
-                                    <span><strong>{{ordered_item.item.name}}</strong> - x{{ordered_item.quantity}}</span>
-                                    <span class="ms-3"> &#8369; {{ordered_item.get_total}} </span>
-                                </p>
-                            {% endif %}
-                        {% endfor %} 
-                        <hr>
-                        <p class="d-flex justify-content-between align-items-center"><strong>Delivery Fee:</strong>&#8369; {{order.delivery_fee}}</p>
-                        <hr>
-                        <p class="d-flex justify-content-between align-items-center"><strong>Total Amount:</strong>&#8369; {{order.get_overall_total}}</p>
-                    </div>
-                </div>
-            {% endfor %}
-                
-        </tbody>
-    </table>
+<main class="order-status my-5 w-90 mx-auto">
+    <section class="card-bg p-4 mx-auto text-center">
+        <div class="cart-row d-flex">
+            <div class="flex-1"><p class="weight-600">Order ID</p></div>
+            <div class="flex-1"><p class="weight-600">Order Date</p></div>
+            <div class="flex-1">
+                <p class="weight-600">Receive Date & Time</p>
+            </div>
+            <div class="flex-1"><p class="weight-600">Address</p></div>
+            <div class="flex-1"><p class="weight-600">Method</p></div>
+            <div class="flex-1"><p class="weight-600">Status</p></div>
+            <div class="flex-1"><p class="weight-600">Order</p></div>
+            <div class="flex-1"><p class="weight-600">Proof of Payment</p></div>
+        </div>
+
+        {% for order in orders %}
+        <div class="cart-row mb-4 d-flex">
+            <div class="flex-1"><p>{{order.id}}</p></div>
+            <div class="flex-1"><p>{{order.order_date}}</p></div>
+            <div class="flex-1">
+                <p>
+                    {{order.receive_date}} <br />
+                    {{order.receive_time}}
+                </p>
+            </div>
+            <div class="flex-1">
+                <p>
+                    {{order.address}}. <br />
+                    <strong>Landline: {{order.address.home_phone}}</strong>
+                </p>
+            </div>
+            <div class="flex-1"><p>{{order.payment_method}}</p></div>
+            <div class="flex-1"><p>{{order.order_status}}</p></div>
+            <div class="flex-1">
+                <button
+                    class="view-order bg-darkbrown"
+                    data-product="{{order.id}}"
+                >
+                    View Order
+                </button>
+            </div>
+            <div class="flex-1">
+                {% if order.payment_method.method == "GCash Delivery" %}
+                <a href="{% url 'upload-proof' order.id %}"
+                    ><button class="bg-sienna">Add Image</button></a
+                >
+                {% else %}
+                <p>Not Applicable</p>
+                {% endif %}
+            </div>
+        </div>
+        <!-- View Order Logic -->
+        <div class="modal modal-{{order.id}}-items">
+            <!-- Modal content -->
+            <div class="modal-content w-25">
+                <span class="close">&times;</span>
+                <h5>All Ordered Items</h5>
+                <hr class="mt-3" />
+                {% for ordered_item in ordered_items %} 
+                {% if ordered_item.order.id == order.id %}
+                <p class="d-flex justify-content-between align-items-center">
+                    <span
+                        ><strong>{{ordered_item.item.name}}</strong> -
+                        x{{ordered_item.quantity}}</span
+                    >
+                    <span class="ms-3">
+                        &#8369; {{ordered_item.get_total}}
+                    </span>
+                </p>
+                {% endif %} 
+                {% endfor %}
+                <hr />
+                <p class="d-flex justify-content-between align-items-center">
+                    <strong>Delivery Fee:</strong>&#8369; {{order.delivery_fee}}
+                </p>
+                <hr />
+                <p class="d-flex justify-content-between align-items-center">
+                    <strong>Total Amount:</strong>&#8369;
+                    {{order.get_overall_total}}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
 </main>
+
 <script src="{% static 'js/customer_orders.js' %}"></script>
 {% endblock content %}

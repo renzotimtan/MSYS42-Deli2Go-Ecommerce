@@ -5,7 +5,7 @@
 {% endblock topbar %} 
 
 {% block topbar-button %}
-<a href="{% url 'cashier-dashboard' %}"><button>Back to Dashboard</button></a>
+<a href="{% url 'dashboard' %}"><button>Back to Dashboard</button></a>
 {% endblock topbar-button %} 
 
 {% block content %}
@@ -20,84 +20,81 @@
     <hr class="my-4">
     <section class="customer-orders__table">
         <h4>Customer Orders</h4>
-        <table class="mt-4 text-center">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Order Date & Time</th>
-                    <th>Receive Date & Time</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Method</th>
-                    <th>Status</th>
-                    <th>Order</th>
-                    <th>Edit Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                {% for order in orders_list %}
-                <tr>
-                    <td>{{order.id}}</td>
-                    <td>{{order.order_date}}</td>
-                    <td>{{order.receive_date}} <br> {{order.receive_time}}</th>
-                    <td>{{order.customer.name}} <strong>{{order.customer.mobile_phone}}</strong></td>
-                    <td>{{order.address}}. <br> <strong>Landline: {{order.address.home_phone}}</strong></td>
-                    <td>{{order.payment_method}}</td>
-                    <td>{{order.order_status}}</td>
-                    <td class="wide-column"><a href=""><button class="view-order bg-darkbrown" data-product={{order.id}}>View Order</button></a></td>
-                    <td class="wide-column"><a href=""><button class="edit-status bg-sienna" data-product={{order.id}}>Edit Status</button></a></td>
-                </tr> 
+        <section class="cart-list p-4 card-bg text-center mt-4">
+            <div class="cart-row d-flex mb-4">
+                <div class="flex-1"><p class="weight-600">Order ID</p></div>
+                <div class="flex-1"><p class="weight-600">Order Date & Time</p></div>
+                <div class="flex-1"><p class="weight-600">Receive Date & Time</p></div>
+                <div class="flex-1"><p class="weight-600">Name</p></div>
+                <div class="flex-2"><p class="weight-600">Address</p></div>
+                <div class="flex-1"><p class="weight-600">Method</p></div>
+                <div class="flex-1"><p class="weight-600">Status</p></div>
+                <div class="flex-1"><p class="weight-600">Order</p></div>
+                <div class="flex-1"><p class="weight-600">Edit Status</p></div>
+            </div>
 
-                <!-- View Order Logic -->
-                <div class="modal modal-{{order.id}}-items">
-                    <!-- Modal content -->
-                    <div class="modal-content w-25">
-                        <span class="close">&times;</span>
-                        <h5>All Ordered Items</h5>
-                        <hr class="mt-3">
-                        {% for ordered_item in ordered_items %}
-                            {% if ordered_item.order.id == order.id %}
-                                <p class="d-flex justify-content-between align-items-center">
-                                    <span><strong>{{ordered_item.item.name}}</strong> - x{{ordered_item.quantity}}</span>
-                                    <span class="ms-3"> &#8369; {{ordered_item.get_total}} </span>
-                                </p>
-                            {% endif %}
-                        {% endfor %} 
-                        <hr>
-                        <p class="d-flex justify-content-between align-items-center"><strong>Delivery Fee:</strong>&#8369; {{order.delivery_fee}}</p>
-                        <hr>
-                        <p class="d-flex justify-content-between align-items-center"><strong>Total Amount:</strong>&#8369; {{order.get_overall_total}}</p>
+            {% for order in orders_list %}
+            <div class="cart-row mb-4 d-flex">
+                <div class="flex-1"><p>{{order.id}}</p></div>
+                <div class="flex-1"><p>{{order.order_date}}</p></div>
+                <div class="flex-1"><p>{{order.receive_date}} <br> {{order.receive_time}}</p></div>
+                <div class="flex-1"><p>{{order.customer.name}} <strong>{{order.customer.mobile_phone}}</strong></p></div>
+                <div class="flex-2"><p>{{order.address}}. <br> <strong>Landline: {{order.address.home_phone}}</strong></p></div>
+                <div class="flex-1"><p>{{order.payment_method}}</p></div>
+                <div class="flex-1"><p>{{order.order_status}}</p></div>
+                <div class="flex-1">
+                    <a href=""><button class="view-order bg-darkbrown" data-product={{order.id}}>View Order</button></a>
+                </div>
+                <div class="flex-1">
+                    <a href=""><button class="edit-status bg-sienna" data-product={{order.id}}>Edit Status</button></a>
+                </div>
+            </div>
+            <!-- View Order Logic -->
+            <div class="modal modal-{{order.id}}-items">
+                <!-- Modal content -->
+                <div class="modal-content w-25">
+                    <span class="close">&times;</span>
+                    <h5>All Ordered Items</h5>
+                    <hr class="mt-3">
+                    {% for ordered_item in ordered_items %}
+                        {% if ordered_item.order.id == order.id %}
+                            <p class="d-flex justify-content-between align-items-center">
+                                <span><strong>{{ordered_item.item.name}}</strong> - x{{ordered_item.quantity}}</span>
+                                <span class="ms-3"> &#8369; {{ordered_item.get_total}} </span>
+                            </p>
+                        {% endif %}
+                    {% endfor %} 
+                    <hr>
+                    <p class="d-flex justify-content-between align-items-center"><strong>Delivery Fee:</strong>&#8369; {{order.delivery_fee}}</p>
+                    <hr>
+                    <p class="d-flex justify-content-between align-items-center"><strong>Total Amount:</strong>&#8369; {{order.get_overall_total}}</p>
+                </div>
+            </div>
+
+            <!-- Change Order Status -->
+            <div class="modal modal-{{order.id}}-status">
+                <!-- Modal content -->
+                <div class="modal-content w-25">
+                    <span class="close">&times;</span>
+                    <h5>Change Status</h5>
+                    <hr class="mt-3">
+                    <select name="status-change" class="status-change px-2 py-1">
+                    {% for status in status_list %}
+                        {% if order.order_status.status == status.status %}
+                        <option value="{{status.status}}" selected>{{status.status}}</option>
+                        {% else %}
+                        <option value="{{status.status}}">{{status.status}}</option>
+                        {% endif %}   
+                    {% endfor %}
+                    </select>  
+                    <div class="d-flex mt-3">
+                        <button class="bg-sienna w-50 me-3">Cancel</button>
+                        <button class="status-save bg-darkbrown w-50" data-product={{order.id}}>Save</button>
                     </div>
                 </div>
-
-                <!-- Change Order Status -->
-                <div class="modal modal-{{order.id}}-status">
-                    <!-- Modal content -->
-                    <div class="modal-content w-25">
-                        <span class="close">&times;</span>
-                        <h5>Change Status</h5>
-                        <hr class="mt-3">
-                        <select name="status-change" class="status-change px-2 py-1">
-                         {% for status in status_list %}
-                            {% if order.order_status.status == status.status %}
-                            <option value="{{status.status}}" selected>{{status.status}}</option>
-                            {% else %}
-                            <option value="{{status.status}}">{{status.status}}</option>
-                            {% endif %}   
-                        {% endfor %}
-                        </select>  
-                        <div class="d-flex mt-3">
-                            <button class="bg-sienna w-50 me-3">Cancel</button>
-                            <button class="status-save bg-darkbrown w-50" data-product={{order.id}}>Save</button>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                    
-                
-            </tbody>
-        </table>
+            </div>
+            {% endfor %}
+        </section>
     </section>
      <section class="pagination-section mt-5 text-center">
         {% if orders_list.has_other_pages %}
