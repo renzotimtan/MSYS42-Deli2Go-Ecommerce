@@ -90,7 +90,10 @@ def logoutUser(request):
 
 # ------------------------------------------------------------------------------------------------------------------------------------------
 
-
+# ----------------------------------------------------------------HOME------------------------------------------------------------------
+def home(request):
+    return render(request, 'home.html')
+# ------------------------------------------------------------------------------------------------------------------------------------------
 
 
 # ----------------------------------------------------------------DASHBOARD------------------------------------------------------------------
@@ -198,6 +201,7 @@ def upload_proof(request, pk):
         if form.is_valid():
             order = Order.objects.get(id=pk)
             order.proof_of_payment = form.cleaned_data['image']
+            order.order_status = OrderStatus.objects.get(status="Payment Sent")
             order.save()
             messages.success(request, "Proof of Payment has been successfully uploaded")
     context = {'order':order}
@@ -212,13 +216,13 @@ def upload_proof(request, pk):
 # --------------------------------------------------------------------SHOP-----------------------------------------------------------------------
 def shop(request):
     # Filter Items
-    items = Item.objects.all()
+    items = Item.objects.all().order_by('brand')
 
     item_filter = ItemFilter(request.GET, queryset=items)
     items = item_filter.qs
 
     #Pagination
-    paginator = Paginator(items, 2)
+    paginator = Paginator(items, 10)
     page_number = request.GET.get('page')
     items_list = paginator.get_page(page_number)
 

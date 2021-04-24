@@ -4,6 +4,11 @@
 <h4>Proof of Payment</h4>
 {% endblock topbar %} 
 
+{% block topbar-button %}
+<a href="{% url 'order-status' %}"><button>Back to Order Status</button></a>
+{% endblock topbar-button %} 
+
+
 {% block content %}
 <main class="my-5 container">
     <h4 class="mb-4">Send Payment Details</h4>
@@ -20,7 +25,7 @@
                     <div class="label mb-2">Image:</div>
                     <div class="image-preview w-100 position-relative">
                         <img id="image" class="position-absolute w-100 h-100" />
-                        {% if order.order_status.status == "Order Sent" or order.order_status.status == "Cancelled"%}
+                        {% if order.order_status.status != "Order Confirmed" %}
                             <h6 class="text-center p-4">Currently Disabled. Please wait for confirmation before uploading your proof of payment.</h6>
                             <input
                             id="files"

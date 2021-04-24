@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% load static %}
+
+{% block content %}
+<main class="home">
+    <header class="home__header">
+        <div class="text-white home__intro d-flex justify-content-start align-items-center w-100">
+            <div class="w-80 mx-auto">
+                <h1 class="mb-3">Welcome</h1>
+                <h3 class="mb-4 weight-400">We are Deli2Go Magallanes.</h3>
+                <a href="{% url 'shop' %}"><button class="bg-darkbrown">Shop Now</button></a>
+            </div>
+        </div>
+        <img class="header-image h-100 w-100" src="{% static 'img/food-header.png' %}" alt="">
+    </header>
+    <section class="home__products container">
+        <h3 class="text-center mt-5">Food We Provide</h3>
+        <div class="d-flex mt-5 justify-content-between">
+            <div class="text-center">
+                <img src="{% static 'img/bakery.png' %}" alt="">
+                <h4 class="mt-3">Pastries</h4>
+            </div>
+            <div class="text-center">
+                <img src="{% static 'img/dessert.png' %}" alt="">
+                <h4 class="mt-3">Dessert</h4>
+            </div>
+            <div class="text-center">
+                <img src="{% static 'img/coffee.png' %}" alt="">
+                <h4 class="mt-3">Coffee</h4>
+            </div>
+            <div class="text-center">
+                <img src="{% static 'img/food-pantry.png' %}" alt="">
+                <h4 class="mt-3">Snacks</h4>
+            </div>
+            <div class="text-center">
+                <img src="{% static 'img/beverages.png' %}" alt="">
+                <h4 class="mt-3">Canned Drinks</h4>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    document.querySelector('.topbar').style.display = 'none';
+</script>
+{% endblock content %}

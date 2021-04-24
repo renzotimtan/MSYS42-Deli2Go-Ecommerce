@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 
 # filters
 from customer.filters import ItemFilter
-from .filters import OrderFilter, ItemFilterQuantity
+from .filters import OrderFilter, ItemFilterQuantity, OrderFilterProof
 
 # json
 import json
@@ -106,6 +106,8 @@ def edit_items(request, pk):
 
     return render(request, 'cashier/edit_items.html', context)
 
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Cashier'])
 def adjust_quantity(request):
     # Filter Items
     items = Item.objects.all().order_by('brand')
@@ -113,7 +115,7 @@ def adjust_quantity(request):
     items = item_filter.qs
 
     # Pagination
-    paginator = Paginator(items, 2)
+    paginator = Paginator(items, 10)
     page_number = request.GET.get('page')
     items_list = paginator.get_page(page_number)
 
@@ -131,7 +133,6 @@ def adjust_quantity(request):
     return render(request, "cashier/adjust_quantity.html", context)
 
 def delete_items(request):
-
     data = json.loads(request.body)
     item = Item.objects.get(id=data['item'])
     item.delete()
@@ -173,6 +174,53 @@ def customer_orders(request):
     }
     return render(request, 'cashier/customer_orders.html', context)
     
+# PROOF OF PAYMENT
+def view_proof(request):
+    method = PaymentMethod.objects.get(method="GCash Delivery")
+    status = OrderStatus.objects.get(status="Payment Sent")
+    orders = Order.objects.filter(payment_method=method, order_status=status).order_by('receive_date')
+    
+    # Filter Orders
+    order_filter = OrderFilterProof(request.GET, queryset=orders)
+    orders = order_filter.qs
+
+    # Pagination
+    paginator = Paginator(orders, 10)
+    page_number = request.GET.get('page')
+    orders_list = paginator.get_page(page_number)
+
+    # URL copy
+    get_copy = request.GET.copy()
+    if get_copy.get('page'):
+        get_copy.pop('page')
+
+    context = {
+        'orders_list':orders_list, 
+        'order_filter':order_filter, 
+        'get_copy': get_copy
+    }
+    return render(request, 'cashier/view_proof.html', context)
+
+def view_proof_picture(request, pk):
+    order = Order.objects.get(id=pk)
+    context = {'order': order}
+    return render(request, 'cashier/view_proof_picture.html', context)
+
+def handle_proof(request, pk, action):
+    order = Order.objects.get(id=pk)
+    if action == "accept":
+        status = OrderStatus.objects.get(status="Payment Confirmed")
+        order.order_status = status
+        order.save()
+        messages.success(request, "Payment has been accepted")
+        return redirect('view-proof')
+    elif action == "decline":
+        status = OrderStatus.objects.get(status="Order Confirmed")
+        order.order_status = status
+        order.proof_of_payment = None
+        order.save()
+        messages.success(request, "Payment has been declined. Please text the customer on the concern.")
+        return redirect("view-proof")
 
 
 # JSON RESPONE

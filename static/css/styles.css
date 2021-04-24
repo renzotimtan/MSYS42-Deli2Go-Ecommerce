@@ -157,6 +157,14 @@ button {
     width: 35%;
 }
 
+.w-40 {
+    width: 35%;
+}
+
+.w-60 {
+    width: 35%;
+}
+
 .w-80 {
     width: 80%;
 }
@@ -220,6 +228,26 @@ button {
     font: inherit;
     font-size: 14px;
     cursor: pointer;
+}
+
+/* Home */
+
+.home__header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 400px;
+}
+
+.home__intro {
+    background: #a16043;
+}
+
+.header-image {
+    object-fit: cover;
+}
+
+.home__products img{
+    width: 200px;
 }
 
 /* Shop */
@@ -646,4 +674,15 @@ button {
 .adjust-quantity__filter-button {
     width: 30%;
     height: 70%;
+}
+
+/* Proof of Payment */
+.view-proof__filter input,
+.view-proof__filter select {
+    margin-right: 10px;
+    padding: 4px 8px;
+}
+
+.view-proof__filter label {
+    margin-right: 7px;
 }

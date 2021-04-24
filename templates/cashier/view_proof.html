@@ -1,0 +1,101 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
+<h4>View Proof of Payment</h4>
+{% endblock topbar %} 
+
+{% block topbar-button %}
+<a href="{% url 'dashboard' %}"><button>Back to Dashboard</button></a>
+{% endblock topbar-button %} 
+
+
+{% block content %}
+<main class="view-proof container my-5">
+    <form class="view-proof__filter" action="" method="GET">
+        <h4 class="mb-4">Filter Orders</h4>
+        {{order_filter.form}}
+        <button class="bg-darkbrown" type="submit">Search</button>
+    </form>
+    <hr class="my-4">
+    <section class="view-proof__table">
+        <h4>Pending Payments</h4>
+        <section class="cart-list p-4 card-bg text-center mt-4">
+            <div class="cart-row d-flex mb-4">
+                <div class="flex-1"><p class="weight-600">Order ID</p></div>
+                <div class="flex-1"><p class="weight-600">Name</p></div>
+                <div class="flex-1"><p class="weight-600">Receive Date & Time</p></div>
+                <div class="flex-1"><p class="weight-600">Method</p></div>
+                <div class="flex-1"><p class="weight-600">Total Amount</p></div>
+                <div class="flex-1"><p class="weight-600">Status</p></div>
+                <div class="flex-1"><p class="weight-600">Photo</p></div>
+            </div>
+
+            
+            {% if orders_list %}
+            {% for order in orders_list %}
+            <div class="cart-row mb-4 d-flex">
+                <div class="flex-1"><p>{{order.id}}</p></div>
+                <div class="flex-1"><p>{{order.customer.name}}</p></div>
+                <div class="flex-1"><p>{{order.receive_date}} <br> {{order.receive_time}}</p></div>
+                <div class="flex-1"><p>{{order.payment_method}}</p></div>
+                <div class="flex-1"><p>{{order.get_overall_total}}</p></div>
+                <div class="flex-1"><p>{{order.order_status}}</p></div>
+                <div class="flex-1"><a href="{% url 'view-proof-picture' order.id %}"><button class="bg-darkbrown">View Photo</button></a></div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="text-center">
+                <p>No Pending Payments</p>
+            </div>
+            {% endif %}
+                
+            
+        </section>
+    </section>
+     <section class="pagination-section mt-5 text-center">
+        {% if orders_list.has_other_pages %}
+        <ul class="pagination justify-content-end">
+
+          <!-- PREVIOUS -->
+          {% if orders_list.has_previous %}
+          <li class="page-item">
+            <a href="?{{ get_copy.urlencode }}&page={{orders_list.previous_page_number}}" class="page-link">&laquo;</a>
+          </li>
+          {% else %}
+            <li class="page-item disabled">
+              <a class="page-link">&laquo;</a>
+            </li>
+          {% endif %}
+          
+          <!-- NUMBERS -->
+          {% for i in orders_list.paginator.page_range %}
+            {% if orders_list.number == i %}
+              <li class="page-item active">
+                <a class="page-link">{{i}}</a>
+              </li>
+            {% else %}
+              <li class="page-item">
+                <a href="?{{ get_copy.urlencode }}&page={{i}}" class="page-link">{{i}}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          <!-- NEXT -->
+          {% if orders_list.has_next %}
+          <li class="page-item">
+              
+            <a href="?{{ get_copy.urlencode }}&page={{orders_list.next_page_number}}" class="page-link">&raquo;</a>
+          </li>
+          {% else %}
+            <li class="page-item disabled">
+              <a class="page-link">&raquo;</a>
+            </li>
+          {% endif %}
+
+            
+        </ul>
+        {% endif %}
+    </section>
+</main>
+{% endblock content %}
+    

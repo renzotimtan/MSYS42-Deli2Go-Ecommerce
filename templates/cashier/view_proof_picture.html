@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
+<h4>View Picture</h4>
+{% endblock topbar %} 
+
+{% block topbar-button %}
+<a href="{% url 'view-proof' %}"><button>Back to View Proof of Payment</button></a>
+{% endblock topbar-button %} 
+
+
+{% block content %}
+    <main class="container my-5">
+        <div class="d-flex justify-content-between align-items-start mt-4">
+            <section class="card-bg p-4 w-50 me-5">
+                    <div class="label mb-2">Image:</div>
+                    <div class="image-preview w-100 position-relative">
+                        <img src="{{order.proof_of_payment.url}}" alt="" class="w-100 h-100">
+                    </div>
+                    <div class="d-flex">
+                        <a href="{% url 'handle-proof' order.id 'accept' %}" class="w-50 me-3"><button class="bg-darkbrown mt-3 w-100">Accept</button></a>
+                        <a href="{% url 'handle-proof' order.id 'decline' %}" class="w-50"><button class="bg-sienna mt-3 w-100">Decline</button></a>
+                    </div>
+            </section>
+            <section class="w-50">
+                <div class="cart-right d-flex flex-column w-100">
+                    <div class="order-summary card-bg p-4 w-100 mt-3 m-lg-0">
+                        <h4>Order Summary</h4>
+                        <hr />
+                        <p class="d-flex justify-content-between"><strong>Order Total:</strong><span> &#8369; <span class="order-total">{{order.get_cart_total}}</span></span</p>
+                        <p class="mt-2 d-flex justify-content-between"><strong>Delivery Fee:</strong><span> &#8369; <span class="delivery-fee">{{order.delivery_fee}}</span></span></p>
+                        <hr>
+                        <p class="mt-2 d-flex justify-content-between"><strong>Total Amount:</strong><span> &#8369; <span class="total-amount"></span>{{order.get_overall_total}}</span></p>
+                    </div>
+                    <div class="card-bg p-4 w-100 mt-3">
+                        <h4>Order Details</h4>
+                        <hr />
+                        <p><strong>Address:</strong></p>
+                        <div class="cart-detail-address">{{order.address}}</div>
+                        <p class="mt-2 d-flex justify-content-between"><strong>Payment Method:</strong><span class="cart-detail-payment">{{order.payment_method}}</span></p>
+                        <p class="mt-2 d-flex justify-content-between"><strong>Date:</strong><span class="cart-detail-date">{{order.receive_date}}</span></p>
+                        <p class="mt-2 d-flex justify-content-between"><strong>Time:</strong><span class="cart-detail-time">{{order.receive_time}}</span></p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+{% endblock content %}
+    
