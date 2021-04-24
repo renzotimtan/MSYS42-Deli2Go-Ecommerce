@@ -35,6 +35,8 @@
             <div class="flex-1"><p class="weight-600">Total</p></div>
         </div>
 
+        
+        {% if order_items %}
         {% for order_item in order_items %}
         <div class=" cart-row mb-4 d-flex">
             <div class="flex-2">
@@ -48,25 +50,30 @@
             </div>
             <div class="flex-1 d-flex">
                 <p class="me-3">x {{order_item.quantity}}</p>
-            <div class="quantity d-flex flex-column justify-content-start">
-                <img
-                data-product={{order_item.item.id}}
-                data-action="add"
-                class="chg-quantity update-cart mb-2"
-                src="{% static 'img/arrow-up.png' %}"
-                />
+                <div class="quantity d-flex flex-column justify-content-start">
+                    <img
+                    data-product={{order_item.item.id}}
+                    data-action="add"
+                    class="chg-quantity update-cart mb-2"
+                    src="{% static 'img/arrow-up.png' %}"
+                    />
 
-                <img
-                data-product={{order_item.item.id}}
-                data-action="remove"
-                class="chg-quantity update-cart"
-                src="{% static 'img/arrow-down.png' %}"
-                />
-            </div>
+                    <img
+                    data-product={{order_item.item.id}}
+                    data-action="remove"
+                    class="chg-quantity update-cart"
+                    src="{% static 'img/arrow-down.png' %}"
+                    />
+                </div>
             </div>
             <div class="flex-1"><p>&#8369; {{order_item.get_total}}</p></div>
         </div>
         {% endfor %}
+        {% else %}
+        <div class="text-center"><p>No items in cart</p></div>
+        {% endif %}
+            
+        
         </section>
         <!-- END -->
 

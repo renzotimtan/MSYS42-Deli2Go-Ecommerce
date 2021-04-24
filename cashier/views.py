@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 
 # filters
 from customer.filters import ItemFilter
-from .filters import OrderFilter
+from .filters import OrderFilter, ItemFilterQuantity
 
 # json
 import json
@@ -23,7 +23,7 @@ from django.http import JsonResponse
 @allowed_users(allowed_roles=['Cashier'])
 def edit_inventory(request):
     # Filter Items
-    items = Item.objects.all().order_by('-brand')
+    items = Item.objects.all().order_by('brand')
     item_filter = ItemFilter(request.GET, queryset=items)
     items = item_filter.qs
 
@@ -106,6 +106,30 @@ def edit_items(request, pk):
 
     return render(request, 'cashier/edit_items.html', context)
 
+def adjust_quantity(request):
+    # Filter Items
+    items = Item.objects.all().order_by('brand')
+    item_filter = ItemFilterQuantity(request.GET, queryset=items)
+    items = item_filter.qs
+
+    # Pagination
+    paginator = Paginator(items, 2)
+    page_number = request.GET.get('page')
+    items_list = paginator.get_page(page_number)
+
+    # URL copy
+    get_copy = request.GET.copy()
+    if get_copy.get('page'):
+        get_copy.pop('page')
+
+    context = {
+        'item_filter':item_filter,
+        'items_list': items_list,
+        'get_copy': get_copy
+    }
+    
+    return render(request, "cashier/adjust_quantity.html", context)
+
 def delete_items(request):
 
     data = json.loads(request.body)
@@ -149,6 +173,9 @@ def customer_orders(request):
     }
     return render(request, 'cashier/customer_orders.html', context)
     
+
+
+# JSON RESPONE
 def change_status(request):
     data = json.loads(request.body)
     status = data['status']
@@ -160,4 +187,16 @@ def change_status(request):
     order.order_status = status
     order.save()
 
+    return JsonResponse("Status Changes", safe=False)
+
+def adjust_quantity_action(request):
+    data = json.loads(request.body)
+    quantities = data['quantities']
+    
+    for itemId in quantities:
+        item = Item.objects.get(id=itemId)
+        item.stock = quantities[itemId]
+        item.save()
+
+    messages.success(request, "Quantites have been updated.")
     return JsonResponse("Status Changes", safe=False)

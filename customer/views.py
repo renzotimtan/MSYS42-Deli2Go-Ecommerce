@@ -23,6 +23,9 @@ from django.contrib.auth import authenticate, login, logout
 from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.models import Group
 
+# Paginator
+from django.core.paginator import Paginator
+
 # -----------------------------------------------------------AUTHENTICATION-------------------------------------------------------------
 @unauthenticated_user
 def loginUser(request):
@@ -214,9 +217,20 @@ def shop(request):
     item_filter = ItemFilter(request.GET, queryset=items)
     items = item_filter.qs
 
+    #Pagination
+    paginator = Paginator(items, 2)
+    page_number = request.GET.get('page')
+    items_list = paginator.get_page(page_number)
+
+    #URL copy
+    get_copy = request.GET.copy()
+    if get_copy.get('page'):
+        get_copy.pop('page')
+
     context = {
-        'items':items,
-        'item_filter':item_filter
+        'items_list':items_list,
+        'item_filter':item_filter,
+        'get_copy':get_copy
     }
     return render(request, 'customer/shop.html', context)
 

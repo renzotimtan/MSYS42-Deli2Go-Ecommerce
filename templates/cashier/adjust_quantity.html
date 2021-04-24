@@ -1,0 +1,120 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
+<h4>Adjust Quantity</h4>
+{% endblock topbar %} 
+
+{% block topbar-button %}
+<a href="{% url 'edit-inventory' %}"><button>Back to Edit Inventory</button></a>
+{% endblock topbar-button %} 
+
+{% block content %}
+<main class="adjust-quantity my-5 container">
+    <h4 class="mb-4">Filter Items</h4>
+    <form method="GET" class="adjust-quantity__filter mb-5">
+        <div>
+            <h6 class="mb-2">Brand:</h6>
+            {{item_filter.form.brand}}
+        </div>
+        <div>
+            <h6 class="mb-2">Name:</h6>
+            {{item_filter.form.name}}
+        </div>
+        <div>
+            <h6 class="mb-2">Category:</h6>
+            {{item_filter.form.category}}
+        </div>
+        <div class="d-flex align-items-end">
+            <button class="bg-darkbrown adjust-quantity__filter-button">Filter</button>
+        </div>
+    </form>
+    <h4 class="mb-4">Add Quantity</h4>
+    <section class="adjust-quantity__grid card-bg p-5">
+        {% for item in items_list %}
+        <div class="d-flex align-items-center justify-content-start">
+            <img class="adjust-quantity__img" src="{{item.image.url}}" alt="" />
+            <div class="ms-4">
+                <h6>{{item.brand}} {{item.name}}</h6>
+                <div
+                    class="d-flex justify-content-start align-items-center mt-2"
+                >
+                    <p type="text" name="quantity">
+                        Quantity:
+                        <span class="quantity-{{item.id}}">{{item.stock}}</span>
+                    </p>
+                    <div class="d-flex flex-column justify-content-start ms-2">
+                        <img
+                            data-product="{{item.id}}"
+                            data-action="add"
+                            class="chg-quantity mb-2"
+                            src="{% static 'img/arrow-up.png' %}"
+                        />
+
+                        <img
+                            data-product="{{item.id}}"
+                            data-action="remove"
+                            class="chg-quantity"
+                            src="{% static 'img/arrow-down.png' %}"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+    <button class="adjust-quantity__save bg-darkbrown mt-5 d-block ms-auto">
+        Save Changes
+    </button>
+    <section class="pagination-section mt-5 text-center container">
+    {% if items_list.has_other_pages %}
+    <ul class="pagination justify-content-end">
+        <!-- PREVIOUS -->
+        {% if items_list.has_previous %}
+        <li class="page-item">
+            <a
+                href="?{{ get_copy.urlencode }}&page={{items_list.previous_page_number}}"
+                class="page-link"
+                >&laquo;</a
+            >
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link">&laquo;</a>
+        </li>
+        {% endif %}
+
+        <!-- NUMBERS -->
+        {% for i in items_list.paginator.page_range %} 
+        {% if items_list.number == i %}
+        <li class="page-item active">
+            <a class="page-link">{{i}}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a href="?{{ get_copy.urlencode }}&page={{i}}" class="page-link"
+                >{{i}}</a
+            >
+        </li>
+        {% endif %} 
+        {% endfor %}
+
+        <!-- NEXT -->
+        {% if items_list.has_next %}
+        <li class="page-item">
+            <a
+                href="?{{ get_copy.urlencode }}&page={{items_list.next_page_number}}"
+                class="page-link"
+                >&raquo;</a
+            >
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link">&raquo;</a>
+        </li>
+        {% endif %}
+    </ul>
+    {% endif %}
+</section>
+</main>
+<script src="{% static 'js/adjust_quantity.js' %}"></script>
+{% endblock content %}

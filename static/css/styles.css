@@ -79,7 +79,6 @@ a:hover {
     color: inherit !important;
 }
 
-
 input:active,
 input:focus,
 button:active,
@@ -572,20 +571,20 @@ button {
 
 /* The Close Button */
 .close {
-  position: absolute;
-  top: 3px;
-  right: 10px;
-  color: var(--darkbrown);
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+    position: absolute;
+    top: 3px;
+    right: 10px;
+    color: var(--darkbrown);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 /* Edit Inventory */
@@ -594,11 +593,11 @@ button {
 }
 
 /* Customer Orders */
-.customer-order__filter input, 
+.customer-order__filter input,
 .customer-order__filter select {
     margin-right: 10px;
     padding: 4px 8px;
-}  
+}
 
 .customer-order__filter label {
     margin-right: 7px;
@@ -609,4 +608,42 @@ button {
     z-index: 10;
     top: 0;
     right: 0;
+}
+
+/* Adjust Quantity */
+.adjust-quantity__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 40px;
+    row-gap: 70px;
+}
+
+.adjust-quantity input {
+    width: 20%;
+    padding: 3px 5px;
+}
+
+.adjust-quantity__img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 100%;
+}
+
+.adjust-quantity__filter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 20px;
+    column-gap: 70px;
+}
+
+.adjust-quantity input,
+.adjust-quantity select {
+    width: 100%;
+    padding: 8px 12px;
+}
+
+.adjust-quantity__filter-button {
+    width: 30%;
+    height: 70%;
 }
