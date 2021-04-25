@@ -181,6 +181,8 @@ def upload_proof(request, pk):
             order.order_status = OrderStatus.objects.get(status="Payment Sent")
             order.save()
             messages.success(request, "Proof of Payment has been successfully uploaded")
+        else:
+            messages.error(request, "No image is uploaded or image file type is invalid. Please choose either from: .jpeg, .jpg, or.png")
     context = {'order':order}
     return render(request, 'customer/dashboard/orders/upload_proof.html', context)
 
