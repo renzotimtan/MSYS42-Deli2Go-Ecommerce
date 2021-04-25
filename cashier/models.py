@@ -35,7 +35,7 @@ class Address(models.Model):
     barangay = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     zip_code = models.CharField(max_length=4)
-    home_phone = models.CharField(max_length=8)
+    home_phone = models.CharField(max_length=8, blank=True, null=True)
 
     # Foreign Key
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)

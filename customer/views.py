@@ -122,26 +122,14 @@ def add_address(request):
     # Address form
     customer = request.user.customer
     form = AddressForm(initial={'customer': customer})
-    context = {'form': form}
-
     if request.method == "POST":
         form = AddressForm(request.POST)
         if form.is_valid():
-            # Validate if home_phone and zip_code are all numbers
-            home_phone = form.cleaned_data.get("home_phone")
-            zip_code = form.cleaned_data.get("zip_code")
-            if not home_phone.isnumeric():
-                messages.error(request, "Error - Phone Number is not valid")
-                context = {'form': form}
-            elif not zip_code.isnumeric():
-                messages.error(request, "Error - Zip Code is not valid")
-                context = {'form': form}
-               # If valid, save
-            else:
-                form.save()
-                messages.success(request, "Success - New Address has been created")
-                return redirect('addresses')
+            form.save()
+            messages.success(request, "New Address has been created")
+            return redirect('addresses')
 
+    context = {'form': form} 
     return render(request, 'customer/dashboard/addresses/add_address.html', context)
 
 @login_required(login_url="login")
@@ -154,20 +142,9 @@ def edit_address(request, pk):
     if request.method == "POST":
         form = AddressForm(request.POST, instance=address)
         if form.is_valid():
-            # Validate if home_phone and zip_code are all numbers
-            home_phone = form.cleaned_data.get("home_phone")
-            zip_code = form.cleaned_data.get("zip_code")
-            if not home_phone.isnumeric():
-                messages.error(request, "Error - Phone Number is not valid")
-                context = {'form': form}
-            elif not zip_code.isnumeric():
-                messages.error(request, "Error - Zip Code is not valid")
-                context = {'form': form}
-               # If valid, save
-            else:
-                form.save()
-                messages.success(request, "Success - Address has been updated")
-                return redirect('addresses')
+            form.save()
+            messages.success(request, "New Address has been created")
+            return redirect('addresses')
 
     context = {'form': form}
     return render(request, 'customer/dashboard/addresses/edit_address.html', context)
@@ -176,7 +153,7 @@ def delete_address(request):
     data = json.loads(request.body)
     address = Address.objects.get(id=data['address'])
     address.delete()
-    messages.success(request, "Success - Address has been deleted")
+    messages.success(request, "Address has been deleted")
     
     return JsonResponse("Address Deleted", safe=False)
 
@@ -247,67 +224,33 @@ def view_item(request, pk):
 
     return render(request, 'customer/item.html', context)
 
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Customer'])
 def checkout(request):
     context = {}
+    customer = request.user.customer
 
-    # Display ordered
-    if request.user.is_authenticated:
-        customer = request.user.customer
+    # Address form
+    form = AddressForm(initial={'customer': customer})
 
-        # Address form
-        form = AddressForm(initial={'customer': customer})
+    # Get current order and ordered items
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    order_items = order.ordereditem_set.all()
 
-        # Get current order and ordered items
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        order_items = order.ordereditem_set.all()
+    # Get all customer addresses
+    addresses = customer.address_set.all()
 
-        # Get all customer addresses
-        addresses = customer.address_set.all()
-
-        # Get payment methods
-        payment_methods = PaymentMethod.objects.all()
-        context = {
-            'order':order, 
-            'order_items':order_items, 
-            'addresses':addresses, 
-            'payment_methods': payment_methods,
-            'form':form,
-        }      
-    
+    # Get payment methods
+    payment_methods = PaymentMethod.objects.all()
+        
     if request.method == "POST":
-
         # If address form is sent
         if 'barangay' in request.POST:
             customer = request.user.customer
             form = AddressForm(request.POST)
             if form.is_valid():
-
-                # Validate if home_phone and zip_code are all numbers
-                home_phone = form.cleaned_data.get("home_phone")
-                zip_code = form.cleaned_data.get("zip_code")
-                if not home_phone.isnumeric():
-                    messages.error(request, "Error - Phone Number is not valid")
-                    context = {
-                        'order':order, 
-                        'order_items':order_items, 
-                        'addresses':addresses, 
-                        'payment_methods': payment_methods,
-                        'form':form,
-                    }    
-                elif not zip_code.isnumeric():
-                    messages.error(request, "Error - Zip Code is not valid")
-                    context = {
-                        'order':order, 
-                        'order_items':order_items, 
-                        'addresses':addresses, 
-                        'payment_methods': payment_methods,
-                        'form':form,
-                    }    
-
-                # If valid, save
-                else:
-                    form.save()
-                    messages.success(request, "Success - New Address has been created")
+                form.save()
+                messages.success(request, "New Address has been created")
 
         # If order is submitted
         elif 'payment' in request.POST:
@@ -332,7 +275,6 @@ def checkout(request):
             post_time_minute = str(request.POST.get('time'))[-2:]
             order.receive_time = f"{post_time_hour}:{post_time_minute}"
             status = OrderStatus.objects.get(status="Order Sent")
-            print(status)
             order.order_status = status
 
             order.save()
@@ -340,8 +282,15 @@ def checkout(request):
             # Message success
             messages.success(request, "Order has been sent")
             return redirect('shop')
+    
+    context = {
+        'order':order, 
+        'order_items':order_items, 
+        'addresses':addresses, 
+        'payment_methods': payment_methods,
+        'form':form,
+    }      
             
-
     return render(request, 'customer/checkout.html', context)
 
 def update_item(request):
@@ -365,16 +314,14 @@ def update_item(request):
         item = Item.objects.get(id=itemId)
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
-        # check if order and item has been made
-        ordered_item, created = OrderedItem.objects.get_or_create(order=order, item=item)
-
         if action == "add":
-
             # If more than stock, error
             if (int(quantity) > item.stock) or (not int(quantity)):
-                messages.error(request, "Error - Exceeded stock.")
+                messages.error(request, "Invalid quantity input, exceeded stock.")
                 return JsonResponse("Exceeded stock", safe=False)
             else:
+                # get or create ordered_item
+                ordered_item, created = OrderedItem.objects.get_or_create(order=order, item=item)
                 # add quantity, subtract stock
                 ordered_item.quantity += int(quantity)
                 item.stock -= int(quantity)
@@ -384,8 +331,14 @@ def update_item(request):
                 messages.success(request, f"{item.name} was successfully added to cart")
             
         elif action == "remove":
+            # get or create ordered_item
+            ordered_item, created = OrderedItem.objects.get_or_create(order=order, item=item)
             ordered_item.quantity -= int(quantity)
-            item.stock += int(quantity)
+
+            if quantity > ordered_item.quantity:
+                item.stock += ordered_item.quantity
+            else:
+                item.stock += int(quantity)
 
             # If quantity is 0, remove ordered_item
             if ordered_item.quantity <= 0:

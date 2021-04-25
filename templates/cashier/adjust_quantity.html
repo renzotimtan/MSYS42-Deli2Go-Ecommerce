@@ -32,7 +32,17 @@
     <section class="adjust-quantity__grid card-bg p-5">
         {% for item in items_list %}
         <div class="d-flex align-items-center justify-content-start">
-            <img class="adjust-quantity__img" src="{{item.image.url}}" alt="" />
+            
+            {% if item.image %}
+                <img class="adjust-quantity__img" src="{{item.image.url}}" alt="" />
+            {% else %}
+                <div
+                    class="temp-image bg-darkbrown rounded-circle d-flex justify-content-center align-items-center adjust-quantity__img"
+                >
+                    <small class="text-white text-center">No Image Available</small>
+                </div>
+            {% endif %}
+            
             <div class="ms-4">
                 <h6>{{item.brand}} {{item.name}}</h6>
                 <div

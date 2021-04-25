@@ -14,7 +14,9 @@ for (let button of arrowButton) {
             quantity.innerText = newVal;
             changedValues[item] = newVal;
         } else if (action == 'remove') {
-            const newVal = parseInt(quantity.innerText) - 5;
+            let newVal = parseInt(quantity.innerText) - 5;
+            if (newVal < 0) newVal = 0;
+            console.log(newVal);
             quantity.innerText = newVal;
             changedValues[item] = newVal;
         }

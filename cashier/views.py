@@ -246,5 +246,5 @@ def adjust_quantity_action(request):
         item.stock = quantities[itemId]
         item.save()
 
-    messages.success(request, "Quantites have been updated.")
+    messages.success(request, "Quantities have been updated.")
     return JsonResponse("Status Changes", safe=False)

@@ -5,6 +5,11 @@
 {% endblock topbar %} 
 
 {% block content %}
+{% for field, error in form.errors.items %}
+    <div class="d-flex align-items-center alert alert-danger my-3 p-2 container" role="alert">
+        {{ error|escape }}
+    </div>
+{% endfor %}
 <main class="container mt-5">
   <h4>Shopping Cart Summary</h4>
   
