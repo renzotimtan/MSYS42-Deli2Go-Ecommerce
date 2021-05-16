@@ -175,6 +175,8 @@ def customer_orders(request):
     return render(request, 'cashier/customer_orders.html', context)
     
 # PROOF OF PAYMENT
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Cashier'])
 def view_proof(request):
     method = PaymentMethod.objects.get(method="GCash Delivery")
     status = OrderStatus.objects.get(status="Payment Sent")
@@ -201,10 +203,13 @@ def view_proof(request):
     }
     return render(request, 'cashier/view_proof.html', context)
 
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Cashier'])
 def view_proof_picture(request, pk):
     order = Order.objects.get(id=pk)
     context = {'order': order}
     return render(request, 'cashier/view_proof_picture.html', context)
+
 
 def handle_proof(request, pk, action):
     order = Order.objects.get(id=pk)
@@ -221,6 +226,19 @@ def handle_proof(request, pk, action):
         order.save()
         messages.success(request, "Payment has been declined. Please text the customer on the concern.")
         return redirect("view-proof")
+
+# ADD DRIVER
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Cashier'])
+def add_driver(request):
+    cash_on_pickup = PaymentMethod.objects.get(method="Cash On Pickup")
+    orders = Order.objects.filter(complete=True).exclude(payment_method=cash_on_pickup).order_by("receive_date")
+    drivers = Driver.objects.all()
+    context = {
+        'orders_list': orders,
+        'drivers': drivers
+    }
+    return render(request, 'cashier/add_driver.html', context)
 
 
 # JSON RESPONE
@@ -247,4 +265,15 @@ def adjust_quantity_action(request):
         item.save()
 
     messages.success(request, "Quantities have been updated.")
-    return JsonResponse("Status Changes", safe=False)
+    return JsonResponse("Status Changed", safe=False)
+
+def change_driver(request):
+    data = json.loads(request.body)
+    driver = data['driver']
+    orderId = data['order']
+
+    order = Order.objects.get(id=orderId)
+    driver = Driver.objects.get(name=driver)
+    order.driver = driver
+    order.save()
+    return JsonResponse("Driver Changed", safe=False)

@@ -1,0 +1,70 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
+<h4>Manage Drivers</h4>
+{% endblock topbar %} 
+
+{% block topbar-button %}
+<a href="{% url 'dashboard' %}"><button>Back to Dashboard</button></a>
+{% endblock topbar-button %} 
+
+
+{% block content %}
+<main class="cart-list my-5 w-90 mx-auto">
+    <section class="cart-list p-4 card-bg text-center mt-4">
+            <div class="cart-row d-flex mb-4">
+                <div class="flex-1"><p class="weight-600">Order ID</p></div>
+                <div class="flex-1"><p class="weight-600">Receive Date & Time</p></div>
+                <div class="flex-1"><p class="weight-600">Name</p></div>
+                <div class="flex-2"><p class="weight-600">Address</p></div>
+                <div class="flex-1"><p class="weight-600">Method</p></div>
+                <div class="flex-1"><p class="weight-600">Status</p></div>
+                <div class="flex-1"><p class="weight-600">Driver</p></div>
+                <div class="flex-1"><p class="weight-600">Add Driver</p></div>
+            </div>
+
+            {% for order in orders_list %}
+            <div class="cart-row mb-4 d-flex">
+                <div class="flex-1"><p>{{order.id}}</p></div>
+                <div class="flex-1"><p>{{order.receive_date}} <br> {{order.receive_time}}</p></div>
+                <div class="flex-1"><p>{{order.customer.name}} <br><strong>{{order.customer.mobile_phone}}</strong></p></div>
+                <div class="flex-2"><p>{{order.address}}. <br> <strong>Landline: {{order.address.home_phone}}</strong></p></div>
+                <div class="flex-1"><p>{{order.payment_method}}</p></div>
+                <div class="flex-1"><p>{{order.order_status}}</p></div>
+                {% if order.driver %}
+                    <div class="flex-1"><p>{{order.driver}}</p></div>
+                {% else %}
+                    <div class="flex-1"><p>N/A</p></div>
+                {% endif %}
+                <div class="flex-1">
+                    <a href=""><button class="add-driver bg-darkbrown" data-product={{order.id}}>Add Driver</button></a>
+                </div>
+            </div>
+            <!-- View Driver Logic -->
+            <div class="modal modal-{{order.id}}">
+                <!-- Modal content -->
+                <div class="modal-content w-25">
+                    <span class="close">&times;</span>
+                    <h5>Add Driver</h5>
+                    <hr class="mt-3">
+                    <select name="driver-change" class="driver-change px-2 py-1">
+                    {% for driver in drivers %}
+                    {% if order.driver == driver %}
+                        <option value="{{driver.name}}" selected>{{driver.name}}</option>
+                    {% else %}
+                        <option value="{{driver.name}}">{{driver.name}}</option>
+                    {% endif %}     
+                    {% endfor %}
+                    </select>  
+                    <div class="d-flex mt-3">
+                        <button class="cancel bg-sienna w-50 me-3">Cancel</button>
+                        <button class="driver-save bg-darkbrown w-50" data-product={{order.id}}>Save</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+</main>
+<script src="{% static 'js/add_driver' %}"></script>
+{% endblock content %}  
+    

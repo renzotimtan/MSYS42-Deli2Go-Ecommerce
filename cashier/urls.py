@@ -16,4 +16,6 @@ urlpatterns = [
     path('view-proof/', views.view_proof, name="view-proof"),
     path('view-proof-picture/<str:pk>/', views.view_proof_picture, name="view-proof-picture"),
     path('handle-proof/<str:pk>/<str:action>/', views.handle_proof, name="handle-proof"),
+    path('add-driver/', views.add_driver, name="add-driver"),
+    path('change-driver/', views.change_driver, name="change-driver"),
 ]

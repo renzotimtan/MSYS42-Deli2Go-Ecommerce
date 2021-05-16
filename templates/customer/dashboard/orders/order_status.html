@@ -17,10 +17,11 @@
             <div class="flex-1">
                 <p class="weight-600">Receive Date & Time</p>
             </div>
-            <div class="flex-1"><p class="weight-600">Address</p></div>
+            <div class="flex-2"><p class="weight-600">Address</p></div>
             <div class="flex-1"><p class="weight-600">Method</p></div>
             <div class="flex-1"><p class="weight-600">Status</p></div>
             <div class="flex-1"><p class="weight-600">Order</p></div>
+            <div class="flex-1"><p class="weight-600">Driver</p></div>
             <div class="flex-1"><p class="weight-600">Proof of Payment</p></div>
         </div>
 
@@ -34,7 +35,7 @@
                     {{order.receive_time}}
                 </p>
             </div>
-            <div class="flex-1">
+            <div class="flex-2">
                 <p>
                     {{order.address}}. <br />
                     <strong>Landline: {{order.address.home_phone}}</strong>
@@ -42,6 +43,14 @@
             </div>
             <div class="flex-1"><p>{{order.payment_method}}</p></div>
             <div class="flex-1"><p>{{order.order_status}}</p></div>
+            
+            {% if order.driver %}
+                <div class="flex-1"><p>{{order.driver}} <br> {{order.driver.mobile_phone}}</p></div>
+            {% else %}
+                <div class="flex-1"><p>TBA</p></div>
+            {% endif %}
+                
+            
             <div class="flex-1">
                 <button
                     class="view-order bg-darkbrown"

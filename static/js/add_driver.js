@@ -1,35 +1,14 @@
-const viewButton = document.querySelectorAll('.view-order');
-const editStatus = document.querySelectorAll('.edit-status');
+const addDriver = document.querySelectorAll('.add-driver');
 const modals = document.querySelectorAll('.modal');
 const closeButtons = document.querySelectorAll('.close');
 const cancel = document.querySelectorAll('.cancel');
 
-for (let button of viewButton) {
+for (let button of addDriver) {
     button.addEventListener('click', (e) => {
         e.preventDefault();
         let order = e.target.dataset.product;
-        const currentModal = document.querySelector(
-            '.modal-' + order + '-items'
-        );
+        const currentModal = document.querySelector(`.modal-${order}`);
         currentModal.style.display = 'block';
-    });
-}
-
-for (let button of editStatus) {
-    button.addEventListener('click', (e) => {
-        e.preventDefault();
-        let order = e.target.dataset.product;
-        const currentModal = document.querySelector(
-            '.modal-' + order + '-status'
-        );
-        currentModal.style.display = 'block';
-    });
-}
-
-for (let button of cancel) {
-    button.addEventListener('click', (e) => {
-        e.target.parentElement.parentElement.parentElement.style.display =
-            'none';
     });
 }
 
@@ -48,30 +27,38 @@ for (let button of closeButtons) {
     });
 }
 
-// Status save
+// Driver save
 
-const statusSaveButtons = document.querySelectorAll('.status-save');
+const driverSaveButtons = document.querySelectorAll('.driver-save');
 
-for (let button of statusSaveButtons) {
+for (let button of driverSaveButtons) {
+    console.log(driverSaveButtons);
     button.addEventListener('click', (e) => {
         e.preventDefault();
         let order = e.target.dataset.product;
         const currentModal = document.querySelector(
-            '.modal-' + order + '-status .status-change'
+            '.modal-' + order + ' .driver-change'
         );
         const selectedValue = currentModal.value;
 
-        fetch('/cashier/change-status/', {
+        fetch('/cashier/change-driver/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrftoken,
             },
-            body: JSON.stringify({ order, status: selectedValue }),
+            body: JSON.stringify({ order, driver: selectedValue }),
         })
             .then((res) => res.json())
             .then((data) => {
                 location.reload();
             });
+    });
+}
+
+for (let button of cancel) {
+    button.addEventListener('click', (e) => {
+        e.target.parentElement.parentElement.parentElement.style.display =
+            'none';
     });
 }

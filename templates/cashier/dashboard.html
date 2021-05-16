@@ -1,18 +1,18 @@
-{% extends 'base.html' %} {% load static %} 
-
-{% block topbar %}
+{% extends 'base.html' %} {% load static %} {% block topbar %}
 <h4>My Account</h4>
-{% endblock topbar %} 
-
-{% block topbar-button %}
+{% endblock topbar %} {% block topbar-button %}
 <a href="{% url 'logout' %}"><button>Logout User</button></a>
-{% endblock topbar-button %} 
-
-{% block content %}
+{% endblock topbar-button %} {% block content %}
 <main class="dashboard mt-5 container">
     <h4>Hello, {{request.user}}!</h4>
     <section
-        class="dashboard__links d-flex justify-content-between align-items-center flex-wrap"
+        class="
+            dashboard__links
+            d-flex
+            justify-content-between
+            align-items-center
+            flex-wrap
+        "
     >
         <div class="dashboard__link d-flex flex-column mb-4">
             <img src="{% static 'img/dashboard_shop.png' %}" alt="" />
@@ -44,7 +44,7 @@
         </div>
         <div class="dashboard__link d-flex flex-column mb-4">
             <img src="{% static 'img/dashboard_info.png' %}" alt="" />
-            <a href="{% url 'addresses' %}"
+            <a href="{% url 'add-driver' %}"
                 ><button class="bg-darkbrown text-white mt-4">
                     Manage Drivers
                 </button></a
