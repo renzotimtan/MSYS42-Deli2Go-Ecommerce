@@ -21,7 +21,7 @@ class AddressForm(ModelForm):
 
 class RegisterForm(UserCreationForm):
     first_name =  forms.RegexField(label="First Name:", regex=r'^[a-zA-Z]+$', error_messages={'invalid': "Please enter a valid first name (no numbers or special characters)"})
-    last_name = forms.RegexField(label="First Name:", regex=r'^[a-zA-Z]+$', error_messages={'invalid': "Please enter a valid last name (no numbers or special characters)"})
+    last_name = forms.RegexField(label="Last Name:", regex=r'^[a-zA-Z]+$', error_messages={'invalid': "Please enter a valid last name (no numbers or special characters)"})
     email = forms.EmailField(max_length=254)
     mobile_phone = forms.RegexField(label="Mobile Phone (09xxxxxxxxx)", regex=r'^[0-9]{11}$', error_messages={'invalid': "Please enter a valid phone number format: 09xxxxxxxxx"})
 

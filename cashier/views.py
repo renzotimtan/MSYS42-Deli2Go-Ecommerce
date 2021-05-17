@@ -276,4 +276,7 @@ def change_driver(request):
     driver = Driver.objects.get(name=driver)
     order.driver = driver
     order.save()
+
+    # Create delivery
+    Delivery.objects.create(customer=order.customer, order=order, driver=driver)
     return JsonResponse("Driver Changed", safe=False)

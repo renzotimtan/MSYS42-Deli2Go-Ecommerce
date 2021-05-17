@@ -153,6 +153,10 @@ button {
     flex: 2;
 }
 
+.w-30 {
+    width: 30%;
+}
+
 .w-35 {
     width: 35%;
 }
@@ -682,4 +686,10 @@ button {
 
 .view-proof__filter label {
     margin-right: 7px;
+}
+
+/* Account Info */
+.account-info__details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }

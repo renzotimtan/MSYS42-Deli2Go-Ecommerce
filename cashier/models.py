@@ -134,3 +134,6 @@ class Delivery(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.driver} - Order {self.order}, {self.customer}"

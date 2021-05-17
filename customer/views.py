@@ -77,7 +77,6 @@ def registerUser(request):
                 group = Group.objects.get(name="Customer")
                 user.groups.add(group)
 
-
                 return redirect('login')
 
     context = {'form':form}
@@ -354,3 +353,58 @@ def update_item(request):
         messages.error(request, "Please register an account before logging in")
 
     return JsonResponse("Cart Updated.", safe=False)
+
+
+
+# --------------------------------------------------------------------Account Info-----------------------------------------------------------------------
+def account_info(request):
+    customer = Customer.objects.get(user=request.user)
+    context = {'customer':customer}
+    return render(request, 'customer/account_info.html', context)
+
+def edit_account(request):
+    customer = Customer.objects.get(user=request.user)
+
+    if request.method == "POST":
+        first_name = request.POST.get("first")
+        last_name = request.POST.get("last")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+
+        context = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'email': email,
+            'mobile_phone': phone,
+        }
+
+        if (User.objects.filter(email=email).count() == 1) and (request.user.email != email):
+            messages.error(request, "Email address has been taken") 
+            return render(request, 'customer/edit_account.html', context)
+        elif not phone.isdigit():
+            messages.error(request, "Phone number is invalid")
+            return render(request, 'customer/edit_account.html', context)
+        else:
+            # Update customer
+            customer.first_name = first_name
+            customer.last_name = last_name
+            customer.email = email
+            customer.mobile_phone = phone
+            customer.save()
+
+            #Update user model`
+            request.user.first_name = first_name
+            request.user.last_name = last_name
+            request.user.email = email
+            request.user.save()
+
+            messages.success(request, "Account details successfully edited")
+            return redirect('account-info')
+
+    context = {
+        'first_name':customer.first_name,
+        'last_name':customer.last_name,
+        'email':customer.email,
+        'mobile_phone':customer.mobile_phone,
+    }
+    return render(request, 'customer/edit_account.html', context)

@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% load static %} {% block topbar %}
+<h4>My Account</h4>
+{% endblock topbar %} {% block content %} 
+
+<main class="auth">
+    <section class="auth-register">
+        <form
+            method="POST"
+            class="auth-register__form card-bg mt-3 mb-2 d-flex justify-content-center align-items-start"
+        >
+            {% csrf_token %}
+
+            <div class="auth-register__content">
+                <h2 class="text-center mb-4">Account Information</h2>
+                <div class="auth-register__form-fields two-col-form">
+                    <div class="form-field">
+                        <div class="label mb-2">First Name:</div>
+                        <input type="text" name="first" value="{{first_name}}">
+                    </div>
+
+                    <div class="form-field">
+                        <div class="label mb-2">
+                            <label for="last">Last Name:</label>
+                        </div>
+                        <input type="text" name="last" value="{{last_name}}">
+                    </div>
+                    <div class="form-field">
+                        <div class="label mb-2">
+                            <label for="email">Email:</label>
+                        </div>
+                        <input type="text" name="email" value="{{email}}">
+                    </div>
+                    <div class="form-field">
+                        <div class="label mb-2">
+                            <label for="phone"
+                                >Mobile Phone (09xxxxxxxxx)</label
+                            >
+                        </div>
+                        <input type="text" name="phone" value="{{mobile_phone}}" minlength="11" maxlength="11">
+                    </div>
+                </div>
+                <button
+                    class="auth-register__submit bg-darkbrown text-white mx-auto d-block w-50"
+                >
+                    Submit
+                </button>
+            </div>
+        </form>
+    </section>
+</main>
+
+{% endblock content %}

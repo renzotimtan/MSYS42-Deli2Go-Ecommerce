@@ -25,4 +25,8 @@ urlpatterns = [
     # Check Order Status
     path('order_status/', views.order_status, name="order-status"),
     path('upload_proof/<str:pk>/', views.upload_proof, name="upload-proof"),
+
+    # Account Info
+    path('account_info/', views.account_info, name="account-info"),
+    path('edit_account/', views.edit_account, name="edit-account"),
 ]

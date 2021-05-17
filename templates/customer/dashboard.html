@@ -15,7 +15,7 @@
         <section class="dashboard__links d-flex justify-content-between align-items-center flex-wrap">
             <div class="dashboard__link d-flex flex-column mb-4">
                 <img src="{% static 'img/dashboard_info.png' %}" alt="">
-                <button class="bg-darkbrown text-white mt-4">My Account Info</button>
+                <a href="{% url 'account-info' %}"><button class="bg-darkbrown text-white mt-4">My Account Info</button></a>
             </div>
             <div class="dashboard__link d-flex flex-column mb-4">
                 <img src="{% static 'img/dashboard_shop.png' %}" alt="">
