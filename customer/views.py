@@ -236,7 +236,7 @@ def checkout(request):
 
     # Get current order and ordered items
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
-    order_items = order.ordereditem_set.all()
+    order_items = order.ordereditem_set.all().order_by("item")
 
     # Get all customer addresses
     addresses = customer.address_set.all()
