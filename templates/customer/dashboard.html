@@ -12,26 +12,26 @@
 {% block content %}
     <main class="dashboard mt-5 container">
         <h4>Hello, {{request.user}}!</h4>
-        <section class="dashboard__links d-flex justify-content-between align-items-center flex-wrap">
-            <div class="dashboard__link d-flex flex-column mb-4">
+        <section class="dashboard__links d-flex justify-content-between align-items-center flex-column flex-lg-row">
+            <div class="dashboard__link d-flex flex-column mb-5">
                 <img src="{% static 'img/dashboard_info.png' %}" alt="">
                 <a href="{% url 'account-info' %}"><button class="bg-darkbrown text-white mt-4">My Account Info</button></a>
             </div>
-            <div class="dashboard__link d-flex flex-column mb-4">
+            <div class="dashboard__link d-flex flex-column mb-5">
                 <img src="{% static 'img/dashboard_shop.png' %}" alt="">
                 <a href="{% url 'shop' %}"><button class="bg-darkbrown text-white mt-4">Shop Items</button></a>
                 
             </div>
-            <div class="dashboard__link d-flex flex-column mb-4">
+            <div class="dashboard__link d-flex flex-column mb-5">
                 <img src="{% static 'img/dashboard_status.png' %}" alt="">
                 <a href="{% url 'order-status' %}"><button class="bg-darkbrown text-white mt-4">Order Status</button></a>
             </div>
-            <div class="dashboard__link d-flex flex-column mb-4">
+            <div class="dashboard__link d-flex flex-column mb-5">
                 <img src="{% static 'img/dashboard_address.png' %}" alt="">
                 <a href="{% url 'addresses' %}"><button class="bg-darkbrown text-white mt-4">My Addresses</button></a>
             </div>
         </section>
-        <section class="dashboard__footer d-flex justify-content-between">
+        <section class="dashboard__footer d-flex justify-content-between d-none d-lg-block">
             <img class="dashboard__motor" src="{% static 'img/motor.png' %}" alt="">
             <img class="dashboard__houses" src="{% static 'img/houses.png' %}" alt="">
         </section>

@@ -334,13 +334,13 @@ def update_item(request):
         elif action == "remove":
             # get or create ordered_item
             ordered_item, created = OrderedItem.objects.get_or_create(order=order, item=item)
-            ordered_item.quantity -= int(quantity)
+            ordered_item.quantity -= 1
+            item.stock += 1
 
-            if quantity > ordered_item.quantity:
-                item.stock += ordered_item.quantity
-            else:
-                item.stock += int(quantity)
-
+            # if quantity > ordered_item.quantity:
+            #     item.stock += ordered_item.quantity
+            # else:
+            #     item.stock += int(quantity)
             # If quantity is 0, remove ordered_item
             if ordered_item.quantity <= 0:
                 ordered_item.delete()

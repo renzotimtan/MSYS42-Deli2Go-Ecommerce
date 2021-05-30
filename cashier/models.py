@@ -16,13 +16,6 @@ class Customer(models.Model):
     def __str__(self):
         return self.first_name + " " + self.last_name
 
-# class Cashier(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     email = models.EmailField(max_length=100)
-    
-#     def __str__(self):
-#         return self.email
-
 class Driver(models.Model):
     name = models.CharField(max_length=80)
     mobile_phone = models.CharField(max_length=10)
