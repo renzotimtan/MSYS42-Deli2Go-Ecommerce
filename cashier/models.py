@@ -55,6 +55,7 @@ class Order(models.Model):
     receive_time = models.TimeField(null=True)
     proof_of_payment = models.ImageField(null=True, blank=True)
     delivery_fee = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    overall_total = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
 
     #ecommerce
     complete = models.BooleanField(default=False)

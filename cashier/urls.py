@@ -18,4 +18,7 @@ urlpatterns = [
     path('handle-proof/<str:pk>/<str:action>/', views.handle_proof, name="handle-proof"),
     path('add-driver/', views.add_driver, name="add-driver"),
     path('change-driver/', views.change_driver, name="change-driver"),
+    path('export-data/', views.export_data, name="export-data"),
+    path('data-table/<str:date>/', views.data_table, name="data-table"),
+    path('export-excel/<str:date>/', views.export_excel, name="export-excel")
 ]

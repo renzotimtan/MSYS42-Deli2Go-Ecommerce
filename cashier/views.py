@@ -17,6 +17,12 @@ from .filters import OrderFilter, ItemFilterQuantity, OrderFilterProof
 import json
 from django.http import JsonResponse
 
+# excel
+import xlwt
+import tablib
+from django.http import HttpResponse
+
+
 
 # EDIT INVENTORY
 @login_required(login_url="login")
@@ -240,8 +246,76 @@ def add_driver(request):
     }
     return render(request, 'cashier/add_driver.html', context)
 
+# EXPORT DATA
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Cashier'])
+def export_data(request):
+    orders = Order.objects.all()
+    months = []
 
-# JSON RESPONE
+    for i in orders:
+        year = i.order_date.strftime("%Y")
+        month = i.order_date.strftime("%m")
+        full = f"{month}-{year}"
+
+        if full not in months:
+            months.append(full)
+    
+    print(months)
+    context = {'months':months}
+    return render(request, "cashier/export_data.html", context)
+
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['Cashier'])
+def data_table(request, date):
+    #03-2020
+    month = date[:2]
+    year = date[3:]
+
+    orders = Order.objects.filter(order_date__month = month, order_date__year = year, complete=True)
+    context = {"orders":orders, "date":date}
+ 
+    return render(request, "cashier/data_table.html", context)
+
+def export_excel(request, date):
+    month = date[:2]
+    year = date[3:]
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="{date}.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Monthly Revenue')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['Order ID', 'Order Date Time', 'Payment Method', 'Order Total']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = []
+    orders = Order.objects.filter(order_date__month = month, order_date__year = year, complete=True)
+
+    for order in orders:
+        rows.append((order.id, order.order_date.strftime("%m/%d/%Y, %H:%M:%S"), order.payment_method, order.overall_total))
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, str(row[col_num]), font_style)
+
+    wb.save(response)
+    return response
+    
+# JSON RESPONSE
 def change_status(request):
     data = json.loads(request.body)
     status = data['status']

@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
+<h4>Data Table</h4>
+{% endblock topbar %} 
+
+{% block topbar-button %}
+<a href="{% url 'export-data' %}"><button>Back to Export Data</button></a>
+{% endblock topbar-button %} 
+
+{% block content %}
+<main class="data-table container my-5">
+    <h4>Export Table</h4>
+    <section class="cart-list p-4 card-bg text-center my-4">
+        <div class="cart-row d-flex mb-4">
+            <div class="flex-1"><p class="weight-600">Order ID</p></div>
+            <div class="flex-1"><p class="weight-600">Order Date Time</p></div>
+            <div class="flex-1"><p class="weight-600">Payment Method</p></div>
+            <div class="flex-1"><p class="weight-600">Total Amount</p></div>
+        </div>
+
+        
+        {% for order in orders %}
+        <div class="cart-row mb-4 d-flex">
+            <div class="flex-1"><p>{{order.id}}</p></div>
+            <div class="flex-1"><p>{{order.order_date}}</p></div>
+            <div class="flex-1"><p>{{order.payment_method}}</p></div>
+            <div class="flex-1"><p>{{order.get_cart_total}}</p></div>
+        </div>
+        {% endfor %}
+    </section>
+    <a href="{% url 'export-excel' date %}"><button class="bg-darkbrown d-block ms-auto">Export to Excel</button></a>
+    
+</main>
+
+{% endblock content %}
+    

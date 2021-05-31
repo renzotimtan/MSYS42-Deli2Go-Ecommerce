@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block topbar %}
+<h4>Export Data</h4>
+{% endblock topbar %} 
+
+{% block topbar-button %}
+<a href="{% url 'dashboard' %}"><button>Back to Dashboard</button></a>
+{% endblock topbar-button %} 
+
+{% block content %}
+<main class="export-data container my-5">
+    <h4 class="text-center">Export Datasheet</h4>
+    <div class="card-bg p-4 w-400px mx-auto mt-3">
+        
+        {% for month in months %}
+        <div class="export-data__month">
+           <a href="{% url 'data-table' month %}">{{month}}</a> 
+        </div>
+        <hr>
+        {% endfor %}
+        
+    </div>
+</main>
+{% endblock content %}
+    

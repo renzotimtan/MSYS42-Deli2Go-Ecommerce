@@ -256,12 +256,15 @@ def checkout(request):
         # If order is submitted
         elif 'payment' in request.POST:
             order = Order.objects.get(customer=request.user.customer, complete=False)
+            ordered_items = OrderedItem.objects.filter(order=order)
+            total = sum([item.get_total for item in ordered_items]) 
 
             # Update order details and set complete to true
             order.complete = True
             order.address = Address.objects.get(id = request.POST.get('address'))
             order.payment_method = PaymentMethod.objects.get(id = request.POST.get('payment'))
             order.receive_date = request.POST.get('date')
+            order.overall_total = total
 
             # Delivery Fee Logic
             if (order.payment_method.method != "Cash On Pickup"):
