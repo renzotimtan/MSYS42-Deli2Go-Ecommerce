@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-import datetime
+from django.utils import timezone
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -49,8 +49,7 @@ class OrderStatus(models.Model):
         return self.status
 
 class Order(models.Model):
-
-    order_date = models.DateTimeField(auto_now_add=True)
+    order_date = models.DateTimeField(default=timezone.now)
     receive_date = models.DateField(null=True)
     receive_time = models.TimeField(null=True)
     proof_of_payment = models.ImageField(null=True, blank=True)

@@ -254,6 +254,7 @@ def export_data(request):
     months = []
 
     for i in orders:
+        print(i.order_date)
         year = i.order_date.strftime("%Y")
         month = i.order_date.strftime("%m")
         full = f"{month}-{year}"
